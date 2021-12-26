@@ -62,7 +62,7 @@ function App() {
           />
           <label>Password</label>
           <input
-            type="text"
+            type="password"
             onChange={(e) => {
               setPasswordReg(e.target.value);
             }}
@@ -82,7 +82,7 @@ function App() {
             }}
           />
           <input
-            type="text"
+            type="password"
             placeholder="Password"
             onChange={(e) => {
               setPasswordLog(e.target.value);

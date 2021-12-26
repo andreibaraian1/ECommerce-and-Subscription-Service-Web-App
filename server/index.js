@@ -76,7 +76,7 @@ app.post("/login", async (req, res) => {
     res.status(500).send("Unexpected error");
   }
 });
-app.post("/me", async (req, res) => {
+app.post("/me", (req, res) => {
   try {
     const token = req.body.token;
     jwt.verify(token, process.env.TOKEN_SECRET, function (err, decoded) {
