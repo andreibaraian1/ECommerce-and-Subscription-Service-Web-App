@@ -8,6 +8,7 @@ function App() {
   const [registerstatus, setRegisterstatus] = useState();
   const [usernameLog, setUsernameLog] = useState("");
   const [passwordLog, setPasswordLog] = useState("");
+  const [user,setUser]=useState();
   const register = (event) => {
     event.preventDefault();
     Axios.post("http://localhost:3001/register", {
@@ -22,18 +23,24 @@ function App() {
         setRegisterstatus(error.response.data);
       });
   };
-  const login = (event) => {
+  const login = async (event) => {
     event.preventDefault();
-    Axios.post("http://localhost:3001/login", {
+    const login = await Axios.post("http://localhost:3001/login", {
       username: usernameLog,
       password: passwordLog,
-    })
-      .then((response) => {
-        
-      })
-      .catch((error) => {
-        
-      });
+    });
+    const token = login.data.token;
+
+    const verify = await Axios.post("http://localhost:3001/me", {
+      token: token,
+    });
+    
+    setUser({
+      username: verify.data.username,
+      id: verify.data.id,
+      role: verify.data.role,
+    });
+    
   };
   return (
     <div>
@@ -85,6 +92,13 @@ function App() {
           <button>Login</button>
         </form>
       </div>
+      <div className="testUser">
+        {user && 
+        <div>
+            <h1>userid:{user.id}</h1>
+            <h1>username:{user.username}</h1>
+            <h1>role:{user.role}</h1>
+        </div>}</div>
     </div>
   );
 }
