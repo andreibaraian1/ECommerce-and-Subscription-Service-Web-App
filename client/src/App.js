@@ -8,7 +8,7 @@ function App() {
   const [registerstatus, setRegisterstatus] = useState();
   const [usernameLog, setUsernameLog] = useState("");
   const [passwordLog, setPasswordLog] = useState("");
-  const [user,setUser]=useState();
+  const [user, setUser] = useState();
   const register = (event) => {
     event.preventDefault();
     Axios.post("http://localhost:3001/register", {
@@ -34,13 +34,12 @@ function App() {
     const verify = await Axios.post("http://localhost:3001/me", {
       token: token,
     });
-    
+
     setUser({
       username: verify.data.username,
       id: verify.data.id,
       role: verify.data.role,
     });
-    
   };
   return (
     <div>
@@ -93,12 +92,14 @@ function App() {
         </form>
       </div>
       <div className="testUser">
-        {user && 
-        <div>
+        {user && (
+          <div>
             <h1>userid:{user.id}</h1>
             <h1>username:{user.username}</h1>
             <h1>role:{user.role}</h1>
-        </div>}</div>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

@@ -55,13 +55,13 @@ app.post("/login", async (req, res) => {
           if (rowCount === 0) res.status(200).send("Username does not exist");
           else {
             const user = result.rows[0];
-            bcrypt.compare(password, user.password, async function (error, result) {
+            bcrypt.compare(password, user.password, function (error, result) {
               if (error) {
                 res.status(500).send("Unexpected error");
               }
               if (result) {
                 console.log("login sucessful");
-                const token = await generateAccessToken(user);
+                const token = generateAccessToken(user);
                 //res.cookie("token", token, { maxage: 86400, httpOnly: true });
                 res.status(200).send({ auth: true, token: token });
               } else {
