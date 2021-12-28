@@ -4,21 +4,29 @@ const Login = (props) => {
   const [usernameLog, setUsernameLog] = useState("");
   const [passwordLog, setPasswordLog] = useState("");
   const [user, setUser] = useState();
+  const handleKeyDown = (event) => {
+    if (event.key === "Enter") {
+      login();
+    }
+  };
+
   const login = async (event) => {
     event.preventDefault();
-    if(usernameLog.trim().length===0 || passwordLog.trim().length===0) {
-        return;
+    if (usernameLog.trim().length === 0 || passwordLog.trim().length === 0) {
+      return;
     }
-    const login = await Axios.post("http://localhost:3001/login", {
-      username: usernameLog,
-      password: passwordLog,
-    });
-    const token = login.data.token;
+    Axios.post(
+      "http://localhost:3001/login",
+      {
+        username: usernameLog,
+        password: passwordLog,
+      },
+      { withCredentials: true }
+    );
 
-    const verify = await Axios.post("http://localhost:3001/me", {
-      token: token,
+    const verify = await Axios.get("http://localhost:3001/me", {
+      withCredentials: true,
     });
-
     setUser({
       username: verify.data.username,
       id: verify.data.id,
@@ -27,9 +35,9 @@ const Login = (props) => {
     setUsernameLog("");
     setPasswordLog("");
   };
-//   const userHandler = () => {
-//     return user;
-//   };
+  //   const userHandler = () => {
+  //     return user;
+  //   };
   return (
     <div>
       <form onSubmit={login}>
@@ -40,6 +48,7 @@ const Login = (props) => {
           onChange={(e) => {
             setUsernameLog(e.target.value);
           }}
+          onKeyDown={handleKeyDown}
           value={usernameLog}
         />
         <input
@@ -48,6 +57,7 @@ const Login = (props) => {
           onChange={(e) => {
             setPasswordLog(e.target.value);
           }}
+          onKeyDown={handleKeyDown}
           value={passwordLog}
         />
         <button>Login</button>

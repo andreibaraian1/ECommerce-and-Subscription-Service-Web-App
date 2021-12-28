@@ -6,15 +6,18 @@ const bcrypt = require("bcrypt");
 const dotenv = require("dotenv");
 const generateAccessToken = require("./generateAccessToken");
 const jwt = require("jsonwebtoken");
+const cookieParser = require("cookie-parser");
+//const authentificateToken = require("./authentificateToken");
 const saltRounds = 10;
 dotenv.config();
 app.use(express.json());
-app.use(cors());
+app.use(cookieParser());
+app.use(cors({ credentials: true, origin: "http://localhost:3000" }));
+
 app.post("/register", async (req, res) => {
   try {
     const username = req.body.username;
     const password = await bcrypt.hash(req.body.password, saltRounds);
-    //const password = req.body.password;
     const email = req.body.email;
     pool.query(
       "INSERT INTO users (username,password,email) VALUES ($1,$2,$3)",
@@ -39,7 +42,7 @@ app.post("/register", async (req, res) => {
     res.status(500).send("Unexpected error");
   }
 });
-app.post("/login", async (req, res) => {
+app.post("/login", (req, res) => {
   try {
     const username = req.body.username;
     const password = req.body.password;
@@ -62,8 +65,8 @@ app.post("/login", async (req, res) => {
               if (result) {
                 console.log("login sucessful");
                 const token = generateAccessToken(user);
-                //res.cookie("token", token, { maxage: 86400, httpOnly: true });
-                res.status(200).send({ auth: true, token: token });
+                res.cookie("token", token, { maxage: 86400, httpOnly: true });
+                res.status(200).send({ auth: true});
               } else {
                 console.log("Passwords do not match");
               }
@@ -76,9 +79,10 @@ app.post("/login", async (req, res) => {
     res.status(500).send("Unexpected error");
   }
 });
-app.post("/me", (req, res) => {
+app.get("/me", (req, res) => {
   try {
-    const token = req.body.token;
+
+    const token = req.cookies.token;
     jwt.verify(token, process.env.TOKEN_SECRET, function (err, decoded) {
       if (err)
         return res
