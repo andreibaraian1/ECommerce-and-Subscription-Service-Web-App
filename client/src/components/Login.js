@@ -4,6 +4,7 @@ const Login = (props) => {
   const [usernameLog, setUsernameLog] = useState("");
   const [passwordLog, setPasswordLog] = useState("");
   const [user, setUser] = useState();
+  const [message, setMessage] = useState("");
   const handleKeyDown = (event) => {
     if (event.key === "Enter") {
       login();
@@ -15,7 +16,7 @@ const Login = (props) => {
     if (usernameLog.trim().length === 0 || passwordLog.trim().length === 0) {
       return;
     }
-    Axios.post(
+    const login = await Axios.post(
       "http://localhost:3001/login",
       {
         username: usernameLog,
@@ -23,21 +24,38 @@ const Login = (props) => {
       },
       { withCredentials: true }
     );
+    console.log(login);
+    if (login.status === 200) {
+      setMessage(login.data.message);
+    }
 
-    const verify = await Axios.get("http://localhost:3001/me", {
-      withCredentials: true,
-    });
-    setUser({
-      username: verify.data.username,
-      id: verify.data.id,
-      role: verify.data.role,
-    });
     setUsernameLog("");
     setPasswordLog("");
+  };
+  const me = async () => {
+    const me = await Axios.get("http://localhost:3001/me", {
+      withCredentials: true,
+    });
+    // setUser({
+    //   username: me.data.username,
+    //   id: me.data.id,
+    //   role: me.data.role
+    // });
+    setUser(me.data.user);
+    
   };
   //   const userHandler = () => {
   //     return user;
   //   };
+  const logout = async () => {
+    const logout = await Axios.get("http://localhost:3001/logout", {
+      withCredentials: true,
+    });
+    if (logout.status === 200) {
+      setUser();
+      setMessage(logout.data.message);
+    }
+  };
   return (
     <div>
       <form onSubmit={login}>
@@ -62,6 +80,7 @@ const Login = (props) => {
         />
         <button>Login</button>
       </form>
+      <button onClick={me}>Me</button>
       <div className="testUser">
         {user && (
           <div>
@@ -70,6 +89,10 @@ const Login = (props) => {
             <h1>role:{user.role}</h1>
           </div>
         )}
+      </div>
+      <div>
+        <button onClick={logout}>Logout</button>
+        <h1>{message}</h1>
       </div>
     </div>
   );

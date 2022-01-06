@@ -7,12 +7,28 @@ const dotenv = require("dotenv");
 const generateAccessToken = require("./generateAccessToken");
 const jwt = require("jsonwebtoken");
 const cookieParser = require("cookie-parser");
-//const authentificateToken = require("./authentificateToken");
 const saltRounds = 10;
 dotenv.config();
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors({ credentials: true, origin: "http://localhost:3000" }));
+function authorization (req,res,next) {
+  const token = req.cookies.token;
+  if(!token) {
+      return res.sendStatus(403);
+
+  }
+  try {
+      const data = jwt.verify(token, process.env.TOKEN_SECRET)
+      req.userId = data.id;
+      req.username = data.username;
+      req.role = data.role;
+      return next();
+  } catch {
+      return res.sendStatus(403);
+     
+  }
+};
 
 app.post("/register", async (req, res) => {
   try {
@@ -66,7 +82,7 @@ app.post("/login", (req, res) => {
                 console.log("login sucessful");
                 const token = generateAccessToken(user);
                 res.cookie("token", token, { maxage: 86400, httpOnly: true });
-                res.status(200).send({ auth: true});
+                res.status(200).json({message: "Succesfully logged in !"});
               } else {
                 console.log("Passwords do not match");
               }
@@ -79,16 +95,21 @@ app.post("/login", (req, res) => {
     res.status(500).send("Unexpected error");
   }
 });
-app.get("/me", (req, res) => {
+app.get("/logout", authorization, (req, res) => {
+  return res
+    .clearCookie("token")
+    .status(200)
+    .json({ message: "Successfully logged out !" });
+});
+app.get("/me", authorization, (req, res) => {
   try {
-
-    const token = req.cookies.token;
-    jwt.verify(token, process.env.TOKEN_SECRET, function (err, decoded) {
-      if (err)
-        return res
-          .status(500)
-          .send({ auth: false, message: "Failed to authentificate token" });
-      res.status(200).send(decoded);
+   
+    return res.json({
+      user : {
+        id: req.userId,
+        username: req.username,
+        role: req.role
+         }
     });
   } catch (err) {
     res.status(500).send("Unexpected error");
