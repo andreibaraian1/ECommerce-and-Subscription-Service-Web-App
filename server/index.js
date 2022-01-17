@@ -15,7 +15,7 @@ app.use(cors({ credentials: true, origin: "http://localhost:3000" }));
 function authorization (req,res,next) {
   const token = req.cookies.token;
   if(!token) {
-      return res.sendStatus(403);
+      return res.sendStatus(204)
 
   }
   try {
@@ -111,6 +111,22 @@ app.get("/me", authorization, (req, res) => {
         role: req.role
          }
     });
+  } catch (err) {
+    res.status(500).send("Unexpected error");
+  }
+});
+app.get("/getProducts",(req,res) => {
+  try {
+    pool.query(
+      "SELECT * FROM PRODUCTS", (err,result) => {
+        if (err) {
+          res.status(400);
+        } else { 
+          res.status(200).json(result.rows);
+        }
+
+      }
+    );
   } catch (err) {
     res.status(500).send("Unexpected error");
   }

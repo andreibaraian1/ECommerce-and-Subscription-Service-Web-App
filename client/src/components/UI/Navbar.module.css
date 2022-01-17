@@ -1,0 +1,16 @@
+.nav {
+  background-color: #333;
+  overflow: hidden;
+}
+.navLeft {
+  float: left;
+}
+.navbarLink {
+  text-decoration: none;
+  color: white;
+  margin: 5px
+}
+.navRight {
+  float: right;
+}
+
