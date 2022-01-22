@@ -59,7 +59,7 @@ const Register = (props) => {
           }}
           value={passwordReg}
         />
-        <button>Register</button>
+        <input type="submit" value="Register" />
       </form>
       <h1>{registerstatus}</h1>
     </div>

@@ -1,21 +1,20 @@
 import Axios from "axios";
 import { useState, useEffect } from "react";
+import Product from "./Product";
 const Products = (props) => {
   const [products, setProducts] = useState();
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchProducts = async () => {
       const getProducts = await Axios.get("http://localhost:3001/getProducts");
       const products = await getProducts.data;
       setProducts(products);
     };
-    fetchData();
+    fetchProducts();
   }, []);
 
   return (
     <div>
-      {products &&
-        products.map((product) => <h1 key={product.id}>{product.nume}</h1>)}
-      {console.log(products)}
+      {products && products.map((product) => <Product key={product.id} product={product} />)}
     </div>
   );
 };

@@ -118,7 +118,7 @@ app.get("/me", authorization, (req, res) => {
 app.get("/getProducts",(req,res) => {
   try {
     pool.query(
-      "SELECT * FROM PRODUCTS", (err,result) => {
+      "SELECT id,name,nr_stoc FROM PRODUCTS", (err,result) => {
         if (err) {
           res.status(400);
         } else { 
@@ -127,6 +127,19 @@ app.get("/getProducts",(req,res) => {
 
       }
     );
+  } catch (err) {
+    res.status(500).send("Unexpected error");
+  }
+});
+app.get("/getProduct/id=:id", (req,res) => {
+  const id =req.params.id;
+  try {
+    pool.query("SELECT * FROM PRODUCTS WHERE id=$1",[id], (err,result) => {
+      if(err) {
+        res.status(400);
+      } else
+      res.status(200).json(result.rows[0]);
+    })
   } catch (err) {
     res.status(500).send("Unexpected error");
   }

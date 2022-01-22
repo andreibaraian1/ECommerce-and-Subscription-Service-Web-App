@@ -72,7 +72,7 @@ const Login = (props) => {
             onKeyDown={handleKeyDown}
             value={passwordLog}
           />
-          <button>Login</button>
+          <input type="submit" value="Login"></input>
         </form>
       )}
       <div className="testUser">
