@@ -1,14 +1,20 @@
 import Axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { setUser } from "../../actions";
 const Logout = (props) => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
-  const getLogout = async () => {
-    const logout = await Axios.get("http://localhost:3001/logout", {
+  const getLogout = () => {
+    Axios.get("http://localhost:3001/logout", {
       withCredentials: true,
+    }).then((res) => {
+      if (res.status === 200) 
+        dispatch(setUser(null))
     });
-    if (logout.status === 200) {
-      props.setUser();
-    }
+    // if (logout.status === 200) {
+    //   props.setUser();
+    // }
     navigate("/");
   };
   //TODO modal for logout

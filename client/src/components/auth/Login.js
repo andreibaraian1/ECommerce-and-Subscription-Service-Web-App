@@ -1,14 +1,17 @@
 import { useState } from "react";
 import Axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { setUser } from "../../actions";
 const Login = (props) => {
+  const dispatch = useDispatch();
   const [usernameLog, setUsernameLog] = useState("");
   const [passwordLog, setPasswordLog] = useState("");
   const [message, setMessage] = useState("");
   const navigate = useNavigate();
   const gotoLogout = () => {
     navigate("/logout");
-  }
+  };
   const handleKeyDown = (event) => {
     if (event.key === "Enter") {
       login();
@@ -34,10 +37,11 @@ const Login = (props) => {
 
     setUsernameLog("");
     setPasswordLog("");
-    const me = await Axios.get("http://localhost:3001/me", {
+    Axios.get("http://localhost:3001/me", {
       withCredentials: true,
+    }).then((res) => {
+      dispatch(setUser(res.data.user));
     });
-    props.setUser(me.data.user);
   };
 
   // const logout = async () => {

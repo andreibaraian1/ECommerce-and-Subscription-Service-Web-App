@@ -17,15 +17,15 @@ const ProductDetail = ({ match }) => {
   }, [id]);
   const addtocart = (event) => {
     event.preventDefault();
-    var cart = JSON.parse(localStorage.getItem("cart"));
+    let cart = JSON.parse(localStorage.getItem("cart"));
     const { id } = product;
     const cartProduct = {
       id: id,
       quantity: parseInt(quantity),
     };
     if (cart) {
-      var ok = 0;
-      for (var i = 0; i < cart.length && ok === 0; i++) {
+      let ok = 0;
+      for (let i = 0; i < cart.length && ok === 0; i++) {
         if (cart[i].id === cartProduct.id) {
           cart[i].quantity = parseInt(cart[i].quantity) + parseInt(quantity);
           ok = 1;

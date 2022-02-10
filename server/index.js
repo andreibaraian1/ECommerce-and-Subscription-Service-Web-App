@@ -118,7 +118,7 @@ app.get("/me", authorization, (req, res) => {
 app.get("/getProducts",(req,res) => {
   try {
     pool.query(
-      "SELECT id,name,nr_stoc FROM PRODUCTS", (err,result) => {
+      "SELECT * FROM PRODUCTS", (err,result) => {
         if (err) {
           res.status(400);
         } else { 
