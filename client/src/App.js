@@ -33,6 +33,7 @@ function App() {
       <Navbar />
       <Routes>
         <Route path="/" element={<Products />} />
+        <Route path="/:category" element={<Products />} />
         <Route path="/products/:id" element={<ProductDetail />} />
         <Route path="register" element={<Register />} />
         <Route path="login" element={<Login />} />

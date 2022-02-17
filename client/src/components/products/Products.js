@@ -7,7 +7,12 @@ import Container from "react-bootstrap/Container";
 import styles from "./Products.module.css";
 import { useSelector, useDispatch } from "react-redux";
 import { setProducts } from "../../actions";
+import ProductsCategories from "./ProductsCategories";
+import { useParams } from "react-router-dom";
 const Products = (props) => {
+  const category = useParams();
+  console.log(category.length);
+  let filteredItems = null;
   const products = useSelector((state) => state.products);
   const dispatch = useDispatch();
   useEffect(() => {
@@ -26,17 +31,36 @@ const Products = (props) => {
     };
     fetchProducts();
   }, [dispatch]);
+  if (products) {
+    if (category.category) {
+      filteredItems = products.filter((product) => {
+        return product.category === category.category;
+      });
+    } else filteredItems = products;
+  }
   return (
-    <Container className={styles.products}>
-      <Row>
-        {products &&
-          products.map((product) => (
-            <Col xs="4" key={product.id}>
-              <Product key={product.id} product={product} />
-            </Col>
-          ))}
-      </Row>
-    </Container>
+    <div>
+      {Object.keys(category).length !== 0 && (
+        <p>Produse din categoria {category.category}</p>
+      )}
+      <Container className={styles.products}>
+        <Row>
+          <Col md="2">
+            <ProductsCategories classname={styles.categories} />
+          </Col>
+          <Col>
+            <Row>
+              {filteredItems &&
+                filteredItems.map((product) => (
+                  <Col md="4" key={product.id}>
+                    <Product key={product.id} product={product} />
+                  </Col>
+                ))}
+            </Row>
+          </Col>
+        </Row>
+      </Container>
+    </div>
   );
 };
 

@@ -200,7 +200,6 @@ app.post("/insertCart", authorization, async (req, res) => {
                   console.log(err);
                   res.status(400);
                 } else {
-                  console.log("got here2 ");
                   res.status(200).send("Updated cart");
                 }
               }

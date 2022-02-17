@@ -5,6 +5,7 @@ const ProductDetail = ({ match }) => {
   const { id } = useParams();
   const [product, setProduct] = useState([]);
   const [quantity, setQuantity] = useState(1);
+
   useEffect(() => {
     const fetchProduct = async () => {
       const getProduct = await Axios.get(
@@ -15,28 +16,18 @@ const ProductDetail = ({ match }) => {
     };
     fetchProduct();
   }, [id]);
-  const addtocart = (event) => {
+  const addtocart = async (event) => {
     event.preventDefault();
-    let cart = JSON.parse(localStorage.getItem("cart"));
     const { id } = product;
     const cartProduct = {
       id: id,
       quantity: parseInt(quantity),
     };
-    if (cart) {
-      let ok = 0;
-      for (let i = 0; i < cart.length && ok === 0; i++) {
-        if (cart[i].id === cartProduct.id) {
-          cart[i].quantity = parseInt(cart[i].quantity) + parseInt(quantity);
-          ok = 1;
-        }
-      }
-      if (ok === 0) cart.push(cartProduct);
-    } else {
-      cart = [cartProduct];
-    }
-    console.log(cart);
-    localStorage.setItem("cart", JSON.stringify(cart));
+    Axios.post(
+      "http://localhost:3001/insertCart",
+      { product:cartProduct },
+      { withCredentials: true }
+    );
   };
   return (
     <div>
