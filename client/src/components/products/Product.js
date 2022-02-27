@@ -46,7 +46,7 @@ const Product = (props) => {
         </Card.Body>
       </Link>
       <Card.Text>{props.product.price} lei</Card.Text>
-      <Button onClick={addtocart}>Add to cart</Button>
+      {props.product.stock ? <Button onClick={addtocart}>Add to cart</Button> : <Button disabled>Sold out</Button>}
     </Card>
   );
 };

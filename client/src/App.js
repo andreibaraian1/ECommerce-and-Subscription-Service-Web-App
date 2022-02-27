@@ -9,9 +9,10 @@ import Axios from "axios";
 import Logout from "./components/auth/Logout";
 import Cart from "./components/cart/Cart";
 import { useDispatch } from "react-redux";
-import { setUser } from "./actions";
+import { setUser, setProducts } from "./actions";
 function App() {
   const dispatch = useDispatch();
+
   useEffect(() => {
     const fetchUser = () => {
       Axios.get("http://localhost:3001/me", {
@@ -24,8 +25,17 @@ function App() {
         .catch((err) => {
           console.log(err);
         });
-
     };
+    const fetchProducts = () => {
+      Axios.get("http://localhost:3001/getProducts")
+        .then((response) => {
+          dispatch(setProducts(response.data));
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    };
+    fetchProducts();
     fetchUser();
   }, [dispatch]);
   return (

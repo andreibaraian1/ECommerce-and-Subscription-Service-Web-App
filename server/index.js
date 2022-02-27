@@ -15,7 +15,7 @@ app.use(cors({ credentials: true, origin: "http://localhost:3000" }));
 function authorization(req, res, next) {
   const token = req.cookies.token;
   if (!token) {
-    return res.sendStatus(204);
+    return res.sendStatus(204).send("Not logged in");
   }
   try {
     const data = jwt.verify(token, process.env.TOKEN_SECRET);

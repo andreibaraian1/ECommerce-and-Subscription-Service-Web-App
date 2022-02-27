@@ -1,10 +1,11 @@
 import { useState } from "react";
 import Axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setUser } from "../../actions";
 const Login = (props) => {
   const dispatch = useDispatch();
+  const user = useSelector((state) => state.user);
   const [usernameLog, setUsernameLog] = useState("");
   const [passwordLog, setPasswordLog] = useState("");
   const [message, setMessage] = useState("");
@@ -18,7 +19,7 @@ const Login = (props) => {
     }
   };
   const login = async (event) => {
-    event.preventDefault();
+    event?.preventDefault();
     if (usernameLog.trim().length === 0 || passwordLog.trim().length === 0) {
       return;
     }
@@ -55,7 +56,7 @@ const Login = (props) => {
   // };
   return (
     <div>
-      {!props.user && (
+      {!user && (
         <form onSubmit={login}>
           <h1>Login</h1>
           <input
@@ -80,11 +81,9 @@ const Login = (props) => {
         </form>
       )}
       <div className="testUser">
-        {props.user && (
+        {user && (
           <div>
-            <h1>userid:{props.user.id}</h1>
-            <h1>username:{props.user.username}</h1>
-            <h1>role:{props.user.role}</h1>
+            <h1>username:{user.username}</h1>
           </div>
         )}
       </div>
