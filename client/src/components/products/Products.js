@@ -8,6 +8,7 @@ import { useSelector } from "react-redux";
 import ProductsCategories from "./ProductsCategories";
 import { useParams } from "react-router-dom";
 
+
 const Products = (props) => {
   const category = useParams();
   let filteredItems = null;

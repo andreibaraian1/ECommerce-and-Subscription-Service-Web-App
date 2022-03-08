@@ -1,15 +1,22 @@
 import Axios from "axios";
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { setModal, setModalMessage } from "../../actions";
 const Cart = (props) => {
   const products = useSelector((state) => state.products);
+  const dispatch = useDispatch();
   const [message, setMessage] = useState("");
   const [cart, setCart] = useState([]);
   const [input, setInput] = useState([]);
+  const [total, setTotal] = useState();
   const fetchCart = () => {
     Axios.get("http://localhost:3001/getCart", { withCredentials: true })
       .then((res) => {
         const payload = res.data[0];
+        if (res.data?.error) {
+          dispatch(setModal());
+          dispatch(setModalMessage(res.data.error));
+        }
         if (!payload || payload.products?.length === 0) {
           setMessage("No items in cart");
         } else {
@@ -19,9 +26,13 @@ const Cart = (props) => {
             ...products?.find((t) => t.id === cartProduct.id),
           }));
           setCart(updatedCart);
+          console.log(updatedCart);
+          let sum = 0;
           updatedCart.forEach((product) => {
             setInput((prev) => ({ ...prev, [product.id]: product.quantity }));
+            sum = sum + product.quantity * product.price;
           });
+          setTotal(sum);
         }
       })
       .catch((err) => {
@@ -34,8 +45,7 @@ const Cart = (props) => {
   const handleInsertInput = (event) => {
     event?.preventDefault();
     const id = event.currentTarget.getAttribute("id");
-    const initialQuantity = event.currentTarget.getAttribute("initialQuantity");
-    console.log(id, input[id] - initialQuantity);
+    const initialQuantity = event.currentTarget.getAttribute("initialquantity");
     insertCart(id, input[id] - initialQuantity);
   };
   const handleInsertButton = (event) => {
@@ -68,23 +78,20 @@ const Cart = (props) => {
             <button onClick={handleInsertButton} id={product.id} value={1}>
               +
             </button>
-            <form
-              onSubmit={handleInsertInput}
+
+            <input
+              type="number"
+              onChange={(e) =>
+                setInput((prev) => ({
+                  ...prev,
+                  [product.id]: e.target.value,
+                }))
+              }
+              value={input[product.id] ?? ""}
+              onBlur={handleInsertInput}
+              initialquantity={product.quantity}
               id={product.id}
-              initialQuantity={product.quantity}
-            >
-              <input
-                type="number"
-                onChange={(e) =>
-                  setInput((prev) => ({
-                    ...prev,
-                    [product.id]: e.target.value,
-                  }))
-                }
-                value={input[product.id]}
-              />
-              <button type="submit">Submit</button>
-            </form>
+            />
 
             <button onClick={handleInsertButton} id={product.id} value={-1}>
               -
@@ -92,6 +99,7 @@ const Cart = (props) => {
           </div>
         ))}
       <p>{message}</p>
+      <p>Total = {total} lei </p>
     </div>
   );
 };

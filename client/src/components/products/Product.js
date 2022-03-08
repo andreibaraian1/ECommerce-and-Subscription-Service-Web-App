@@ -2,12 +2,11 @@ import { Link } from "react-router-dom";
 import styles from "./Product.module.css";
 import { Card, Button } from "react-bootstrap";
 import Axios from "axios";
+import { useDispatch } from "react-redux";
+import { setModal, setModalMessage } from "../../actions";
 const Product = (props) => {
+  const dispatch = useDispatch();
   const addtocart = async () => {
-    // const getCart = await Axios.get("http://localhost:3001/getCart");
-    // let cart = getCart.data;
-    // console.log(cart);
-    // let cart = JSON.parse(localStorage.getItem("cart"));
     const { id } = props.product;
     const product = {
       id: id,
@@ -18,21 +17,10 @@ const Product = (props) => {
       { product },
       { withCredentials: true }
     );
-    console.log(insertCart);
-
-    // if (cart) {
-    //   let ok = 0;
-    //   for (let i = 0; i < cart.length && ok === 0; i++) {
-    //     if (cart[i].id === product.id) {
-    //       cart[i].quantity = parseInt(cart[i].quantity) + 1;
-    //       ok = 1;
-    //     }
-    //   }
-    //   if (ok === 0) cart.push(product);
-    // } else {
-    //   cart = [product];
-    // }
-    // localStorage.setItem("cart", JSON.stringify(cart));
+    if (insertCart.data?.error) {
+      dispatch(setModal());
+      dispatch(setModalMessage(insertCart.data.error));
+    }
   };
   return (
     <Card key={props.product.id} className={styles.product}>
@@ -46,7 +34,11 @@ const Product = (props) => {
         </Card.Body>
       </Link>
       <Card.Text>{props.product.price} lei</Card.Text>
-      {props.product.stock ? <Button onClick={addtocart}>Add to cart</Button> : <Button disabled>Sold out</Button>}
+      {props.product.stock ? (
+        <Button onClick={addtocart}>Add to cart</Button>
+      ) : (
+        <Button disabled>Sold out</Button>
+      )}
     </Card>
   );
 };
