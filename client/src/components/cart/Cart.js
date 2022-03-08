@@ -2,7 +2,9 @@ import Axios from "axios";
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { setModal, setModalMessage } from "../../actions";
+import { useNavigate } from "react-router-dom";
 const Cart = (props) => {
+  const navigate = useNavigate();
   const products = useSelector((state) => state.products);
   const dispatch = useDispatch();
   const [message, setMessage] = useState("");
@@ -16,6 +18,7 @@ const Cart = (props) => {
         if (res.data?.error) {
           dispatch(setModal());
           dispatch(setModalMessage(res.data.error));
+          navigate('/');
         }
         if (!payload || payload.products?.length === 0) {
           setMessage("No items in cart");
