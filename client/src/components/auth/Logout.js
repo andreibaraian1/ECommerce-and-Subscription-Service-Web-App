@@ -6,11 +6,10 @@ const Logout = (props) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const getLogout = () => {
-    Axios.get("http://localhost:3001/logout", {
+    Axios.get("http://localhost:3001/users/logout", {
       withCredentials: true,
     }).then((res) => {
-      if (res.status === 200) 
-        dispatch(setUser(null))
+      if (res.status === 200) dispatch(setUser(null));
     });
     // if (logout.status === 200) {
     //   props.setUser();

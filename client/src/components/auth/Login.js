@@ -24,7 +24,7 @@ const Login = (props) => {
       return;
     }
     const login = await Axios.post(
-      "http://localhost:3001/login",
+      "http://localhost:3001/users/login",
       {
         username: usernameLog,
         password: passwordLog,
@@ -38,7 +38,7 @@ const Login = (props) => {
 
     setUsernameLog("");
     setPasswordLog("");
-    Axios.get("http://localhost:3001/me", {
+    Axios.get("http://localhost:3001/users/getUser", {
       withCredentials: true,
     }).then((res) => {
       dispatch(setUser(res.data.user));

@@ -12,24 +12,26 @@ const Cart = (props) => {
   const [input, setInput] = useState([]);
   const [total, setTotal] = useState();
   const fetchCart = () => {
-    Axios.get("http://localhost:3001/getCart", { withCredentials: true })
+    Axios.get("http://localhost:3001/cart/getCart", { withCredentials: true })
       .then((res) => {
         const payload = res.data[0];
         if (res.data?.error) {
           dispatch(setModal());
           dispatch(setModalMessage(res.data.error));
-          navigate('/');
+          navigate("/");
         }
+
         if (!payload || payload.products?.length === 0) {
           setMessage("No items in cart");
+          setCart([]);
         } else {
           const cartPayload = payload.products;
           let updatedCart = cartPayload.map((cartProduct) => ({
             ...cartProduct,
             ...products?.find((t) => t.id === cartProduct.id),
           }));
+
           setCart(updatedCart);
-          console.log(updatedCart);
           let sum = 0;
           updatedCart.forEach((product) => {
             setInput((prev) => ({ ...prev, [product.id]: product.quantity }));
@@ -44,9 +46,9 @@ const Cart = (props) => {
   };
   useEffect(() => {
     fetchCart();
-  }, [products]);
+  }, [products]); // eslint-disable-line react-hooks/exhaustive-deps
   const handleInsertInput = (event) => {
-    event?.preventDefault();
+    event.preventDefault();
     const id = event.currentTarget.getAttribute("id");
     const initialQuantity = event.currentTarget.getAttribute("initialquantity");
     insertCart(id, input[id] - initialQuantity);
@@ -62,7 +64,7 @@ const Cart = (props) => {
       quantity: parseInt(value),
     };
     Axios.post(
-      "http://localhost:3001/insertCart",
+      "http://localhost:3001/cart/insertCart",
       { product },
       { withCredentials: true }
     ).then(() => {

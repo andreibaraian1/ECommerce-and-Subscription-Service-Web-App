@@ -9,7 +9,7 @@ const ProductDetail = ({ match }) => {
   useEffect(() => {
     const fetchProduct = async () => {
       const getProduct = await Axios.get(
-        `http://localhost:3001/getProduct/id=${id}`
+        `http://localhost:3001/products/getProduct/${id}`
       );
       const product = getProduct.data;
       setProduct(product);
@@ -24,8 +24,8 @@ const ProductDetail = ({ match }) => {
       quantity: parseInt(quantity),
     };
     Axios.post(
-      "http://localhost:3001/insertCart",
-      { product:cartProduct },
+      "http://localhost:3001/cart/insertCart",
+      { product: cartProduct },
       { withCredentials: true }
     );
   };

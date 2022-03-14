@@ -1,6 +1,4 @@
-import Modal from "@mui/material/Modal";
-import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
+import { Modal, Box, Typography } from "@mui/material";
 import { useSelector, useDispatch } from "react-redux";
 import { setModal, setModalMessage } from "../../actions";
 const style = {

@@ -13,7 +13,7 @@ const Product = (props) => {
       quantity: 1,
     };
     const insertCart = await Axios.post(
-      "http://localhost:3001/insertCart",
+      "http://localhost:3001/cart/insertCart",
       { product },
       { withCredentials: true }
     );

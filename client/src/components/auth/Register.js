@@ -7,13 +7,15 @@ const Register = (props) => {
   const [registerstatus, setRegisterstatus] = useState();
   const register = (event) => {
     event.preventDefault();
-    if (usernameReg.trim().length === 0 || passwordReg.trim().length === 0 || emailReg.trim().length === 0)
-     {
-         setRegisterstatus('Inputs cannot be empty');
-         return;
-
-     }
-    Axios.post("http://localhost:3001/register", {
+    if (
+      usernameReg.trim().length === 0 ||
+      passwordReg.trim().length === 0 ||
+      emailReg.trim().length === 0
+    ) {
+      setRegisterstatus("Inputs cannot be empty");
+      return;
+    }
+    Axios.post("http://localhost:3001/users/register", {
       username: usernameReg,
       password: passwordReg,
       email: emailReg,

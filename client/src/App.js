@@ -8,7 +8,7 @@ import { useEffect } from "react";
 import Axios from "axios";
 import Logout from "./components/auth/Logout";
 import Cart from "./components/cart/Cart";
-import { useDispatch,useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setUser, setProducts } from "./actions";
 import ModalLayout from "./components/UI/ModalLayout";
 function App() {
@@ -17,7 +17,7 @@ function App() {
   const modalMessage = useSelector((state) => state.modalMessage);
   useEffect(() => {
     const fetchUser = () => {
-      Axios.get("http://localhost:3001/me", {
+      Axios.get("http://localhost:3001/users/getUser", {
         withCredentials: true,
       })
         .then((res) => {
@@ -29,7 +29,7 @@ function App() {
         });
     };
     const fetchProducts = () => {
-      Axios.get("http://localhost:3001/getProducts")
+      Axios.get("http://localhost:3001/products/getProducts")
         .then((response) => {
           dispatch(setProducts(response.data));
         })
@@ -43,7 +43,7 @@ function App() {
   return (
     <Router>
       <Navbar />
-      {modal && <ModalLayout message={modalMessage}/>}
+      {modal && <ModalLayout message={modalMessage} />}
       <Routes>
         <Route path="/" element={<Products />} />
         <Route path="/:category" element={<Products />} />
