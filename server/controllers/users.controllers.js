@@ -39,6 +39,7 @@ const login = async (req, res) => {
   }
 };
 const register = async (req, res) => {
+  const saltRounds = 10;
   try {
     const username = req.body.username;
     const password = await bcrypt.hash(req.body.password, saltRounds);

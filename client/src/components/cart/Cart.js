@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { setModal, setModalMessage } from "../../actions";
 import { useNavigate } from "react-router-dom";
+import { Button, FormControl, InputGroup } from "react-bootstrap";
 const Cart = (props) => {
   const navigate = useNavigate();
   const products = useSelector((state) => state.products);
@@ -71,6 +72,17 @@ const Cart = (props) => {
       fetchCart();
     });
   };
+
+  const sendOrder = async () => {
+    const result = await Axios.post(
+      "http://localhost:3001/cart/sendOrder",
+      { total },
+      { withCredentials: true }
+    );
+    if (result.status === 200) {
+      navigate("/"); //navigate to order
+    }
+  };
   return (
     <div>
       {cart &&
@@ -80,31 +92,39 @@ const Cart = (props) => {
               Product: {product.name} price/buc: {product.price} quantity :
               {product.quantity} price {product.price * product.quantity}
             </p>
-            <button onClick={handleInsertButton} id={product.id} value={1}>
+            <Button onClick={handleInsertButton} id={product.id} value={1}>
               +
-            </button>
+            </Button>
 
-            <input
-              type="number"
-              onChange={(e) =>
-                setInput((prev) => ({
-                  ...prev,
-                  [product.id]: e.target.value,
-                }))
-              }
-              value={input[product.id] ?? ""}
-              onBlur={handleInsertInput}
-              initialquantity={product.quantity}
-              id={product.id}
-            />
+            <InputGroup className="mb-3">
+              {/* <InputGroup.Text>{input[product.id] ?? ""}</InputGroup.Text> */}
+              <FormControl
+                type="numeric"
+                onChange={(e) =>
+                  setInput((prev) => ({
+                    ...prev,
+                    [product.id]: e.target.value,
+                  }))
+                }
+                value={input[product.id] ?? ""}
+                onBlur={handleInsertInput}
+                initialquantity={product.quantity}
+                id={product.id}
+              />
+            </InputGroup>
 
-            <button onClick={handleInsertButton} id={product.id} value={-1}>
+            <Button onClick={handleInsertButton} id={product.id} value={-1}>
               -
-            </button>
+            </Button>
           </div>
         ))}
       <p>{message}</p>
-      <p>Total = {total} lei </p>
+      {cart.length > 0 && (
+        <div>
+          <p>Total = {total} lei </p>
+          <Button onClick={sendOrder}>Send Order</Button>
+        </div>
+      )}
     </div>
   );
 };
