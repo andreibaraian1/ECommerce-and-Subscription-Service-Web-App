@@ -4,42 +4,16 @@ import Products from "./components/products/Products";
 import ProductDetail from "./components/products/ProductDetail";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Navbar from "./components/UI/Navbar";
-import { useEffect } from "react";
-import Axios from "axios";
 import Logout from "./components/auth/Logout";
 import Cart from "./components/cart/Cart";
-import { useDispatch, useSelector } from "react-redux";
-import { setUser, setProducts } from "./actions";
+import { useSelector } from "react-redux";
 import ModalLayout from "./components/UI/ModalLayout";
+import UseFetch from "./hooks/UseFetch";
 function App() {
-  const dispatch = useDispatch();
   const modal = useSelector((state) => state.modal);
   const modalMessage = useSelector((state) => state.modalMessage);
-  useEffect(() => {
-    const fetchUser = () => {
-      Axios.get("http://localhost:3001/users/getUser", {
-        withCredentials: true,
-      })
-        .then((res) => {
-          if (res.data.user) dispatch(setUser(res.data.user));
-          else dispatch(setUser(null));
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    };
-    const fetchProducts = () => {
-      Axios.get("http://localhost:3001/products/getProducts")
-        .then((response) => {
-          dispatch(setProducts(response.data));
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    };
-    fetchProducts();
-    fetchUser();
-  }, [dispatch]);
+  UseFetch();
+
   return (
     <Router>
       <Navbar />

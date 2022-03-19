@@ -5,5 +5,4 @@ const cartController = require("../controllers/cart.controller");
 
 router.get("/getCart", checkAuth, cartController.getCart);
 router.post("/insertCart", checkAuth, cartController.insertCart);
-router.post("/sendOrder", checkAuth, cartController.sendOrder);
 module.exports = router;

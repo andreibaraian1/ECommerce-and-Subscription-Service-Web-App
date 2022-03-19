@@ -1,4 +1,4 @@
-const pool = require("../db");
+const pool = require("../middleware/db.middleware");
 const getProducts = (req, res) => {
   try {
     pool.query("SELECT * FROM PRODUCTS", (err, result) => {

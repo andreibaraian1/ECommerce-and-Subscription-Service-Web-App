@@ -1,4 +1,4 @@
-const pool = require("../db");
+const pool = require("../middleware/db.middleware");
 const cartServices = require("../services/cart.services");
 const getCart = async (req, res) => {
   try {
@@ -69,37 +69,7 @@ const insertCart = (req, res) => {
     res.status(500).send("Unexpected error");
   }
 };
-const sendOrder = async (req, res) => {
-  const total = req.body.total;
-  try {
-    const cart = await cartServices.getCartByUserId(req.userId);
-    const { id } = cart[0];
-    const idUser = req.userId;
-    const cartValidation = await cartServices.checkOrder(
-      cart[0].products,
-      total
-    );
-    if (cartValidation.valid) {
-      const sendOrder = cartServices.sendOrder(
-        id,
-        idUser,
-        cartValidation.cart,
-        total,
-        res
-      );
-      if (sendOrder) {
-        res.status(200).json("Order sent successfully");
-      }
-    } else {
-      res.status(400).send({ error: "Prices changed. Please reload the app" });
-    }
-  } catch (err) {
-    console.log(err);
-    res.status(500).send("Unexpected error");
-  }
-};
 module.exports = {
   getCart,
   insertCart,
-  sendOrder,
 };

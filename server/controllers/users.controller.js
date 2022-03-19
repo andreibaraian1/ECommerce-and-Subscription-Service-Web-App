@@ -1,6 +1,6 @@
-const pool = require("../db");
+const pool = require("../middleware/db.middleware");
 const bcrypt = require("bcrypt");
-const generateAccessToken = require("../generateAccessToken");
+const generateAccessToken = require("../middleware/generateAccessToken.middleware");
 const login = async (req, res) => {
   try {
     const username = req.body.username;

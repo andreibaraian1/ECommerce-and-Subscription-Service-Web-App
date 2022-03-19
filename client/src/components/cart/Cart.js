@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { setModal, setModalMessage } from "../../actions";
 import { useNavigate } from "react-router-dom";
 import { Button, FormControl, InputGroup } from "react-bootstrap";
+import UseFetch from "../../hooks/UseFetch";
 const Cart = (props) => {
   const navigate = useNavigate();
   const products = useSelector((state) => state.products);
@@ -12,6 +13,7 @@ const Cart = (props) => {
   const [cart, setCart] = useState([]);
   const [input, setInput] = useState([]);
   const [total, setTotal] = useState();
+  const [disabled, setDisabled] = useState(false);
   const fetchCart = () => {
     Axios.get("http://localhost:3001/cart/getCart", { withCredentials: true })
       .then((res) => {
@@ -37,6 +39,9 @@ const Cart = (props) => {
           updatedCart.forEach((product) => {
             setInput((prev) => ({ ...prev, [product.id]: product.quantity }));
             sum = sum + product.quantity * product.price;
+            if (product.stock === 0) {
+              setDisabled(true);
+            }
           });
           setTotal(sum);
         }
@@ -75,12 +80,13 @@ const Cart = (props) => {
 
   const sendOrder = async () => {
     const result = await Axios.post(
-      "http://localhost:3001/cart/sendOrder",
+      "http://localhost:3001/order/sendOrder",
       { total },
       { withCredentials: true }
     );
     if (result.status === 200) {
       navigate("/"); //navigate to order
+      UseFetch();
     }
   };
   return (
@@ -91,8 +97,16 @@ const Cart = (props) => {
             <p>
               Product: {product.name} price/buc: {product.price} quantity :
               {product.quantity} price {product.price * product.quantity}
+              {product.stock === 0 && <p>Product out of stock</p>}
             </p>
-            <Button onClick={handleInsertButton} id={product.id} value={1}>
+
+            <img src={`/images/${product.image}`} alt={product.name} />
+            <Button
+              disabled={disabled}
+              onClick={handleInsertButton}
+              id={product.id}
+              value={1}
+            >
               +
             </Button>
 
@@ -113,7 +127,12 @@ const Cart = (props) => {
               />
             </InputGroup>
 
-            <Button onClick={handleInsertButton} id={product.id} value={-1}>
+            <Button
+              disabled={disabled}
+              onClick={handleInsertButton}
+              id={product.id}
+              value={-1}
+            >
               -
             </Button>
           </div>
@@ -122,7 +141,9 @@ const Cart = (props) => {
       {cart.length > 0 && (
         <div>
           <p>Total = {total} lei </p>
-          <Button onClick={sendOrder}>Send Order</Button>
+          <Button disabled={disabled} onClick={sendOrder}>
+            Send Order
+          </Button>
         </div>
       )}
     </div>
