@@ -5,7 +5,7 @@ const Register = (props) => {
   const [passwordReg, setPasswordReg] = useState("");
   const [emailReg, setEmailReg] = useState("");
   const [registerstatus, setRegisterstatus] = useState();
-  const register = (event) => {
+  const register = async (event) => {
     event.preventDefault();
     if (
       usernameReg.trim().length === 0 ||
@@ -15,20 +15,20 @@ const Register = (props) => {
       setRegisterstatus("Inputs cannot be empty");
       return;
     }
-    Axios.post("http://localhost:3001/users/register", {
+    const register = await Axios.post("http://localhost:3001/users/register", {
       username: usernameReg,
       password: passwordReg,
       email: emailReg,
-    })
-      .then((response) => {
-        setRegisterstatus(response.data);
-      })
-      .catch((error) => {
-        setRegisterstatus(error.response.data);
-      });
-    setEmailReg("");
-    setUsernameReg("");
-    setPasswordReg("");
+    });
+    console.log(register);
+    if (register.data?.error) {
+      setRegisterstatus(register.data.error);
+    } else {
+      setRegisterstatus(register.data.message);
+      setEmailReg("");
+      setUsernameReg("");
+      setPasswordReg("");
+    }
   };
   return (
     <div>

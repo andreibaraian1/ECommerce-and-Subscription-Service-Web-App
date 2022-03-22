@@ -1,6 +1,6 @@
 const cartServices = require("../services/cart.services");
 const orderServices = require("../services/order.services");
-const pool = require("../middleware/db.middleware");
+const pool = require('../db.config');
 const sendOrder = async (req, res) => {
   const total = req.body.total;
   try {

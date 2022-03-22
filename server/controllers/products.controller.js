@@ -1,25 +1,18 @@
-const pool = require("../middleware/db.middleware");
-const getProducts = (req, res) => {
+
+const productsServices = require("../services/products.services");
+const getProducts = async (req, res) => {
   try {
-    pool.query("SELECT * FROM PRODUCTS", (err, result) => {
-      if (err) {
-        res.status(400);
-      } else {
-        res.status(200).json(result.rows);
-      }
-    });
+    const result = await productsServices.getProducts();
+    res.status(200).json(result);
   } catch (err) {
     res.status(500).send("Unexpected error");
   }
 };
-const getProduct = (req, res) => {
+const getProduct = async (req, res) => {
   const id = req.params.id;
   try {
-    pool.query("SELECT * FROM PRODUCTS WHERE id=$1", [id], (err, result) => {
-      if (err) {
-        res.status(400);
-      } else res.status(200).json(result.rows[0]);
-    });
+    const result = await productsServices.getProductById(id);
+    res.status(200).json(result);
   } catch (err) {
     res.status(500).send("Unexpected error");
   }

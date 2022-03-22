@@ -15,44 +15,44 @@ const Cart = (props) => {
   const [total, setTotal] = useState();
   const [disabled, setDisabled] = useState(false);
   const fetchCart = () => {
-    Axios.get("http://localhost:3001/cart/getCart", { withCredentials: true })
-      .then((res) => {
-        const payload = res.data[0];
-        if (res.data?.error) {
-          dispatch(setModal());
-          dispatch(setModalMessage(res.data.error));
-          navigate("/");
-        }
+    Axios.get("http://localhost:3001/cart/getCart", {
+      withCredentials: true,
+    }).then((res) => {
+      const cart = res.data;
+      if (cart?.error) {
+        dispatch(setModal());
+        dispatch(setModalMessage(cart.error));
+        navigate("/");
+      }
+      if (!cart || cart?.length === 0) {
+        setMessage("No items in cart");
+        setCart([]);
+      } else {
+        const updatedCart = cart.map((c) => ({
+          ...products?.find((payload) => payload.id === c.id_product),
+          quantity: c.quantity,
+        }));
+        updatedCart.sort((a, b) => a.id - b.id);
+        setCart(updatedCart);
 
-        if (!payload || payload.products?.length === 0) {
-          setMessage("No items in cart");
-          setCart([]);
-        } else {
-          const cartPayload = payload.products;
-          let updatedCart = cartPayload.map((cartProduct) => ({
-            ...cartProduct,
-            ...products?.find((t) => t.id === cartProduct.id),
-          }));
-
-          setCart(updatedCart);
-          let sum = 0;
-          updatedCart.forEach((product) => {
-            setInput((prev) => ({ ...prev, [product.id]: product.quantity }));
-            sum = sum + product.quantity * product.price;
-            if (product.stock === 0) {
-              setDisabled(true);
-            }
-          });
-          setTotal(sum);
+        let sum = 0;
+        for (const product of updatedCart) {
+          product
+            ? setInput((prev) => ({ ...prev, [product?.id]: product.quantity }))
+            : console.log("undefined");
+          sum = sum + product.quantity * product.price;
+          if (product.stock === 0) {
+            setDisabled(true);
+          }
         }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+        setTotal(sum);
+      }
+    });
   };
+
   useEffect(() => {
     fetchCart();
-  }, [products]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [products]); 
   const handleInsertInput = (event) => {
     event.preventDefault();
     const id = event.currentTarget.getAttribute("id");
@@ -73,9 +73,7 @@ const Cart = (props) => {
       "http://localhost:3001/cart/insertCart",
       { product },
       { withCredentials: true }
-    ).then(() => {
-      fetchCart();
-    });
+    ).then(() => fetchCart());
   };
 
   const sendOrder = async () => {
@@ -91,52 +89,51 @@ const Cart = (props) => {
   };
   return (
     <div>
-      {cart &&
-        cart?.map((product) => (
-          <div key={product.id}>
-            <p>
-              Product: {product.name} price/buc: {product.price} quantity :
-              {product.quantity} price {product.price * product.quantity}
-              {product.stock === 0 && <p>Product out of stock</p>}
-            </p>
+      {cart?.map((product) => (
+        <div key={product.id}>
+          <p>
+            Product: {product.name} price/buc: {product.price} quantity :
+            {product.quantity} price {product.price * product.quantity}
+            {product.stock === 0 && <p>Product out of stock</p>}
+          </p>
 
-            <img src={`/images/${product.image}`} alt={product.name} />
-            <Button
-              disabled={disabled}
-              onClick={handleInsertButton}
+          <img src={`/images/${product.image}`} alt={product.name} />
+          <Button
+            disabled={disabled}
+            onClick={handleInsertButton}
+            id={product.id}
+            value={1}
+          >
+            +
+          </Button>
+
+          <InputGroup className="mb-3">
+            {/* <InputGroup.Text>{input[product.id] ?? ""}</InputGroup.Text> */}
+            <FormControl
+              type="numeric"
+              onChange={(e) =>
+                setInput((prev) => ({
+                  ...prev,
+                  [product.id]: e.target.value,
+                }))
+              }
+              value={input[product.id] ?? ""}
+              onBlur={handleInsertInput}
+              initialquantity={product.quantity}
               id={product.id}
-              value={1}
-            >
-              +
-            </Button>
+            />
+          </InputGroup>
 
-            <InputGroup className="mb-3">
-              {/* <InputGroup.Text>{input[product.id] ?? ""}</InputGroup.Text> */}
-              <FormControl
-                type="numeric"
-                onChange={(e) =>
-                  setInput((prev) => ({
-                    ...prev,
-                    [product.id]: e.target.value,
-                  }))
-                }
-                value={input[product.id] ?? ""}
-                onBlur={handleInsertInput}
-                initialquantity={product.quantity}
-                id={product.id}
-              />
-            </InputGroup>
-
-            <Button
-              disabled={disabled}
-              onClick={handleInsertButton}
-              id={product.id}
-              value={-1}
-            >
-              -
-            </Button>
-          </div>
-        ))}
+          <Button
+            disabled={disabled}
+            onClick={handleInsertButton}
+            id={product.id}
+            value={-1}
+          >
+            -
+          </Button>
+        </div>
+      ))}
       <p>{message}</p>
       {cart.length > 0 && (
         <div>

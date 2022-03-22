@@ -1,4 +1,4 @@
-const pool = require("../middleware/db.middleware");
+const pool = require('../db.config');
 const {
   getProducts,
   updateQuantityById,
