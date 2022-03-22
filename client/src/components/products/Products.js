@@ -1,4 +1,3 @@
-
 import Product from "./Product";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
@@ -7,8 +6,7 @@ import styles from "./Products.module.css";
 import { useSelector } from "react-redux";
 import ProductsCategories from "./ProductsCategories";
 import { useParams } from "react-router-dom";
-
-
+import { Link } from "react-router-dom";
 const Products = (props) => {
   const category = useParams();
   let filteredItems = null;
@@ -22,12 +20,15 @@ const Products = (props) => {
   }
   return (
     <div>
-      {Object.keys(category).length !== 0 && (
-        <p>Products category : {category.category}</p>
-      )}
+      {category.category && <p>Products category : {category.category}</p>}
       <Container className={styles.products}>
         <Row>
           <Col md="2">
+            {category.category && (
+              <Link to={`/`}>
+                <p>Remove filters</p>
+              </Link>
+            )}
             <ProductsCategories classname={styles.categories} />
           </Col>
           <Col>
