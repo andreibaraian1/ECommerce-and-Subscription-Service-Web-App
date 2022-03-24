@@ -1,0 +1,9 @@
+.product {
+    background: #fff;
+    max-width: 300px;
+    z-index: 15;
+    margin:5%;
+}
+img {
+    width:150px;
+}

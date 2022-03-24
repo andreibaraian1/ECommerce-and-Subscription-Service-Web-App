@@ -9,6 +9,7 @@ import Cart from "./components/cart/Cart";
 import { useSelector } from "react-redux";
 import ModalLayout from "./components/UI/ModalLayout";
 import UseFetch from "./hooks/UseFetch";
+import Orders from "./components/orders/Orders";
 function App() {
   const modal = useSelector((state) => state.modal);
   const modalMessage = useSelector((state) => state.modalMessage);
@@ -26,6 +27,7 @@ function App() {
         <Route path="login" element={<Login />} />
         <Route path="logout" element={<Logout />} />
         <Route path="cart" element={<Cart />} />
+        <Route path="orders" element={<Orders />} />
       </Routes>
     </Router>
   );

@@ -10,7 +10,8 @@ import { Link } from "react-router-dom";
 const Products = (props) => {
   const category = useParams();
   let filteredItems = null;
-  const products = useSelector((state) => state.products);
+  let products = useSelector((state) => state.products);
+  products = products?.sort((a,b)=> b.stock-a.stock)
   if (products) {
     if (category.category) {
       filteredItems = products.filter((product) => {

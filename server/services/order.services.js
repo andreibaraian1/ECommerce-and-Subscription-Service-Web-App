@@ -56,7 +56,19 @@ const sendOrder = async (idUser, cart, total) => {
   }
   return false;
 };
+const getOrderByUserId = async (userId) => {
+  const { rows } = await pool.query("SELECT * FROM ORDERS WHERE id_user=$1", [
+    userId,
+  ]);
+  return rows;
+};
+const getOrders = async () => {
+  const { rows } = await pool.query("SELECT * FROM ORDERS");
+  return rows;
+};
 module.exports = {
   checkOrder,
   sendOrder,
+  getOrderByUserId,
+  getOrders,
 };

@@ -13,6 +13,9 @@ const Navbar = (props) => {
           <Link className={styles.navbarLink} to="/cart">
             Cart
           </Link>
+          <Link className={styles.navbarLink} to="/orders">
+            Orders
+          </Link>
         </div>
         <div className={styles.navRight}>
 

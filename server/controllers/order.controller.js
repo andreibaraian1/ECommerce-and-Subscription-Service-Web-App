@@ -26,6 +26,25 @@ const sendOrder = async (req, res) => {
     res.status(500).send("Unexpected error");
   }
 };
+const getOrderByUserId = async (req, res) => {
+  const userId = req.userId;
+  const getOrders = await orderServices.getOrderByUserId(userId);
+  return res.status(200).json(getOrders);
+};
+const getOrders = async (req, res) => {
+  try {
+    if (req.role === 0) {
+      return res.status(200).send({ error: "Not admin" });
+    }
+    const getOrders = await orderServices.getOrders();
+    res.status(200).json(getOrders);
+  } catch (err) {
+    console.log(err);
+    res.status(500).send("Unexpected error");
+  }
+};
 module.exports = {
   sendOrder,
+  getOrders,
+  getOrderByUserId
 };
