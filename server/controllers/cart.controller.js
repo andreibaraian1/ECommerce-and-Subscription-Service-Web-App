@@ -1,4 +1,3 @@
-
 const cartServices = require("../services/cart.services");
 const getCart = async (req, res) => {
   try {
@@ -12,7 +11,8 @@ const insertCart = async (req, res) => {
   try {
     const userId = req.userId;
     const product = req.body.product;
-    const result = await cartServices.insertCart(userId, product);
+    const cart = await cartServices.getCartByUserId(userId);
+    const result = await cartServices.insertCart(userId, product, cart);
     if (result?.error) {
       res.status(result.status).json({ error: "unknown error" });
     } else {

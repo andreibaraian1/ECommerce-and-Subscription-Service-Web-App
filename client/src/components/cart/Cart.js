@@ -52,7 +52,7 @@ const Cart = (props) => {
 
   useEffect(() => {
     fetchCart();
-  }, [products]); 
+  }, [products]); // eslint-disable-line react-hooks/exhaustive-deps
   const handleInsertInput = (event) => {
     event.preventDefault();
     const id = event.currentTarget.getAttribute("id");

@@ -20,7 +20,7 @@ const Register = (props) => {
       password: passwordReg,
       email: emailReg,
     });
-    console.log(register);
+    
     if (register.data?.error) {
       setRegisterstatus(register.data.error);
     } else {

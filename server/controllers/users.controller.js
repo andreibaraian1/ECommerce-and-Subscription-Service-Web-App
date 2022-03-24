@@ -20,7 +20,6 @@ const register = async (req, res) => {
     const password = req.body.password;
     const email = req.body.email;
     const result = await userServices.register(username, password, email);
-    console.log(result);
     if (result?.error) {
       res.status(result.status).json({ error: result.error });
     } else {
