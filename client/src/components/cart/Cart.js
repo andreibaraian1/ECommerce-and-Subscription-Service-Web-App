@@ -3,8 +3,16 @@ import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { setModal, setModalMessage } from "../../actions";
 import { useNavigate } from "react-router-dom";
-import { Button, FormControl, InputGroup } from "react-bootstrap";
-import UseFetch from "../../hooks/UseFetch";
+import {
+  Button,
+  Col,
+  Container,
+  FormControl,
+  InputGroup,
+  Row,
+} from "react-bootstrap";
+import Fetch from "../../api/Fetch";
+import styles from "./Cart.module.css";
 const Cart = (props) => {
   const navigate = useNavigate();
   const products = useSelector((state) => state.products);
@@ -23,12 +31,13 @@ const Cart = (props) => {
         dispatch(setModal());
         dispatch(setModalMessage(cart.error));
         navigate("/");
+        return;
       }
       if (!cart || cart?.length === 0) {
         setMessage("No items in cart");
         setCart([]);
       } else {
-        const updatedCart = cart.map((c) => ({
+        const updatedCart = cart?.map((c) => ({
           ...products?.find((payload) => payload.id === c.id_product),
           quantity: c.quantity,
         }));
@@ -84,56 +93,62 @@ const Cart = (props) => {
     );
     if (result.status === 200) {
       navigate("/"); //navigate to order
-      UseFetch();
+      Fetch();
     }
   };
   return (
     <div>
-      {cart?.map((product) => (
-        <div key={product.id}>
-          <p>
-            Product: {product.name} price/buc: {product.price} quantity :
-            {product.quantity} price {product.price * product.quantity}
-            {product.stock === 0 && <p>Product out of stock</p>}
-          </p>
+      <Container>
+        {cart?.map((product) => (
+          <Row>
+            <div key={product.id}>
+              <Col>
+                <img src={`/images/${product.image}`} alt={product.name} />
+              </Col>
+              <Col>{product.name}</Col>
+              <Col>price/buc: {product.price}</Col>
+              <Col>quantity :{product.quantity}</Col>
+              {product.stock === 0 && <Col>Product out of stock</Col>}
+              <Col>
+                <Button
+                  disabled={disabled}
+                  onClick={handleInsertButton}
+                  id={product.id}
+                  value={1}
+                >
+                  +
+                </Button>
 
-          <img src={`/images/${product.image}`} alt={product.name} />
-          <Button
-            disabled={disabled}
-            onClick={handleInsertButton}
-            id={product.id}
-            value={1}
-          >
-            +
-          </Button>
+                <InputGroup>
+                  <FormControl
+                    className={`w-50`}
+                    type="numeric"
+                    onChange={(e) =>
+                      setInput((prev) => ({
+                        ...prev,
+                        [product.id]: e.target.value,
+                      }))
+                    }
+                    value={input[product.id] ?? ""}
+                    onBlur={handleInsertInput}
+                    initialquantity={product.quantity}
+                    id={product.id}
+                  />
+                </InputGroup>
 
-          <InputGroup className="mb-3">
-            {/* <InputGroup.Text>{input[product.id] ?? ""}</InputGroup.Text> */}
-            <FormControl
-              type="numeric"
-              onChange={(e) =>
-                setInput((prev) => ({
-                  ...prev,
-                  [product.id]: e.target.value,
-                }))
-              }
-              value={input[product.id] ?? ""}
-              onBlur={handleInsertInput}
-              initialquantity={product.quantity}
-              id={product.id}
-            />
-          </InputGroup>
-
-          <Button
-            disabled={disabled}
-            onClick={handleInsertButton}
-            id={product.id}
-            value={-1}
-          >
-            -
-          </Button>
-        </div>
-      ))}
+                <Button
+                  disabled={disabled}
+                  onClick={handleInsertButton}
+                  id={product.id}
+                  value={-1}
+                >
+                  -
+                </Button>
+              </Col>
+            </div>
+          </Row>
+        ))}
+      </Container>
       <p>{message}</p>
       {cart.length > 0 && (
         <div>

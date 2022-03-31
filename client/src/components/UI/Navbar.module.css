@@ -1,6 +1,5 @@
-.nav {
-  background-color: #333;
-  overflow: hidden;
+.navbar {
+  height:5%
 }
 .navLeft {
   float: left;
@@ -8,7 +7,7 @@
 .navbarLink {
   text-decoration: none;
   color: white;
-  margin: 5px
+  margin: 15px
 }
 .navRight {
   float: right;

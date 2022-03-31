@@ -26,7 +26,7 @@ const Product = (props) => {
     <Card key={props.product.id} className={styles.product}>
       <Link to={`/products/${props.product.id}`}>
         <Card.Img
-          src={`images/${props.product.image}`}
+          src={`../images/${props.product.image}`}
           alt={props.product.name}
         />
         <Card.Body>

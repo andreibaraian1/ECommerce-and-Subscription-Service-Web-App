@@ -7,18 +7,23 @@ import { useSelector } from "react-redux";
 import ProductsCategories from "./ProductsCategories";
 import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
 const Products = (props) => {
+  const [filteredItems, setFilteredItems] = useState(null);
   const category = useParams();
-  let filteredItems = null;
-  let products = useSelector((state) => state.products);
-  products = products?.sort((a,b)=> b.stock-a.stock)
-  if (products) {
-    if (category.category) {
-      filteredItems = products.filter((product) => {
-        return product.category === category.category;
-      });
-    } else filteredItems = products;
-  }
+  const products = useSelector((state) => state.products);
+  useEffect(() => {
+    const prod = products?.sort((a, b) => b.stock - a.stock);
+    if (prod) {
+      if (category.category) {
+        const filtered = prod.filter((product) => {
+          return product.category === category.category;
+        });
+        setFilteredItems(filtered);
+      } else setFilteredItems(prod);
+    }
+  }, [category.category, products]);
+
   return (
     <div>
       {category.category && <p>Products category : {category.category}</p>}

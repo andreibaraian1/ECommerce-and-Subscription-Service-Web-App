@@ -2,7 +2,7 @@ import Axios from "axios";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { setUser, setProducts } from "../actions";
-const UseFetch = () => {
+const Fetch = () => {
   const dispatch = useDispatch();
   useEffect(() => {
     Axios.get("http://localhost:3001/users/getUser", {
@@ -25,4 +25,4 @@ const UseFetch = () => {
       });
   });
 };
-export default UseFetch;
+export default Fetch;

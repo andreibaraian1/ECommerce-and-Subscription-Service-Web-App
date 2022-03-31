@@ -14,7 +14,7 @@ const ProductsCategories = () => {
       {categories &&
         categories.map((category) => (
           <div className={styles.category} key={category}>
-            <Link to={`/${category}`}>
+            <Link to={`/filter/${category}`}>
               <p>{category}</p>
             </Link>
           </div>

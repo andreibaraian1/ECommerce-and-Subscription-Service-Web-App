@@ -32,28 +32,18 @@ const Login = (props) => {
       { withCredentials: true }
     );
 
-    if (login.status === 200) {
-      setMessage(login.data.message);
-    }
-
+    if (login.data?.error) {
+      return setMessage(login.data.error);
+    } 
     setUsernameLog("");
     setPasswordLog("");
     Axios.get("http://localhost:3001/users/getUser", {
       withCredentials: true,
     }).then((res) => {
       dispatch(setUser(res.data.user));
+      navigate('/');
     });
   };
-
-  // const logout = async () => {
-  //   const logout = await Axios.get("http://localhost:3001/logout", {
-  //     withCredentials: true,
-  //   });
-  //   if (logout.status === 200) {
-  //     props.setUser();
-  //     setMessage(logout.data.message);
-  //   }
-  // };
   return (
     <div>
       {!user && (

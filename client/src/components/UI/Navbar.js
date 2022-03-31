@@ -1,43 +1,52 @@
 import { Link } from "react-router-dom";
 import styles from "./Navbar.module.css";
 import { useSelector } from "react-redux";
-const Navbar = (props) => {
-  const user = useSelector(state => state.user);
+import { Navbar as Navi, Container, Nav } from "react-bootstrap";
+const Navbar = () => {
+  const user = useSelector((state) => state.user);
   return (
     <div>
-      <nav className={styles.nav}>
-        <div className={styles.navLeft}>
-          <Link className={styles.navbarLink} to="/">
-            Home
-          </Link>
-          <Link className={styles.navbarLink} to="/cart">
-            Cart
-          </Link>
-          <Link className={styles.navbarLink} to="/orders">
-            Orders
-          </Link>
-        </div>
-        <div className={styles.navRight}>
+      <Navi fixed='top' bg="dark"  variant="dark" className={styles.navbar}>
+        <Container>
+          <Navi.Brand>
+            <Link className={styles.navbarLink} to="/">
+              Home
+            </Link>
+          </Navi.Brand>
+          <Navi.Toggle aria-controls="responsive-navbar-nav" />
 
-          {!user  && (
-          <div>
-            <Link className={styles.navbarLink} to="/login">
-              Login
+          <Nav className="me-auto">
+            <Link className={styles.navbarLink} to="/cart">
+              Cart
             </Link>
-            <Link className={styles.navbarLink} to="/register">
-              Register
+
+            <Link className={styles.navbarLink} to="/orders">
+              Orders
             </Link>
-          </div>
-        )}
-         {user  && (
-          <div>
-            <Link className={styles.navbarLink} to="/logout">
-              Logout
-            </Link>
-          </div>
-        )}
-        </div>
-      </nav>
+          </Nav>
+          {!user && (
+            <Nav className={styles.navRight}>
+              <Link className={styles.navbarLink} to="/login">
+                Login
+              </Link>
+
+              <Link className={styles.navbarLink} to="/register">
+                Register
+              </Link>
+            </Nav>
+          )}
+          {user && (
+            <Nav className={styles.navRight}>
+              <Link className={styles.navbarLink} to="/profile">
+                Profile
+              </Link>
+              <Link className={styles.navbarLink} to="/logout">
+                Logout
+              </Link>
+            </Nav>
+          )}
+        </Container>
+      </Navi>
     </div>
   );
 };
