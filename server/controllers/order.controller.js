@@ -3,6 +3,7 @@ const orderServices = require("../services/order.services");
 const pool = require("../db.config");
 const sendOrder = async (req, res) => {
   const total = req.body.total;
+  const shippingInfo = req.body.shipping;
   try {
     const cart = await cartServices.getCartByUserId(req.userId);
     const idUser = req.userId;
@@ -11,7 +12,8 @@ const sendOrder = async (req, res) => {
       const sendOrder = await orderServices.sendOrder(
         idUser,
         cartValidation.finalCart,
-        total
+        total,
+        shippingInfo
       );
       if (sendOrder) {
         res.status(200).json("Order sent successfully");

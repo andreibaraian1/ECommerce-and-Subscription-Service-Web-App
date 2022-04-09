@@ -3,16 +3,10 @@ import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { setModal, setModalMessage } from "../../actions";
 import { useNavigate } from "react-router-dom";
-import {
-  Button,
-  Col,
-  Container,
-  FormControl,
-  InputGroup,
-  Row,
-} from "react-bootstrap";
-import Fetch from "../../api/Fetch";
-import styles from "./Cart.module.css";
+import { Col, Container, FormControl, InputGroup, Row } from "react-bootstrap";
+import { Button, Stack } from "@mui/material";
+import OrderInfo from "./OrderInfo";
+// import styles from "./Cart.module.css";
 const Cart = (props) => {
   const navigate = useNavigate();
   const products = useSelector((state) => state.products);
@@ -22,6 +16,7 @@ const Cart = (props) => {
   const [input, setInput] = useState([]);
   const [total, setTotal] = useState();
   const [disabled, setDisabled] = useState(false);
+  const [page, setPage] = useState(1);
   const fetchCart = () => {
     Axios.get("http://localhost:3001/cart/getCart", {
       withCredentials: true,
@@ -85,79 +80,114 @@ const Cart = (props) => {
     ).then(() => fetchCart());
   };
 
-  const sendOrder = async () => {
-    const result = await Axios.post(
-      "http://localhost:3001/order/sendOrder",
-      { total },
-      { withCredentials: true }
-    );
-    if (result.status === 200) {
-      navigate("/"); //navigate to order
-      Fetch();
+  // const sendOrder = async () => {
+  //   const result = await Axios.post(
+  //     "http://localhost:3001/order/sendOrder",
+  //     { total },
+  //     { withCredentials: true }
+  //   );
+  //   if (result.status === 200) {
+  //     navigate("/"); //navigate to order
+  //     Fetch();
+  //   }
+  // };
+  const getStepButton = (page) => {
+    switch (page) {
+      case 1:
+        return (
+          <Stack direction="row" justifyContent="end">
+            <Button
+              disabled={disabled}
+              onClick={() => {
+                setPage(2);
+              }}
+            >
+              Next
+            </Button>
+          </Stack>
+        );
+      case 2:
+        return (
+          <Stack direction="row" justifyContent="end">
+            <Button
+              onClick={() => {
+                setPage(1);
+              }}
+            >
+              Back
+            </Button>
+          </Stack>
+        );
+      default:
+        console.log("button broken");
     }
   };
   return (
     <div>
-      <Container>
-        {cart?.map((product) => (
-          <Row>
-            <div key={product.id}>
-              <Col>
-                <img src={`/images/${product.image}`} alt={product.name} />
-              </Col>
-              <Col>{product.name}</Col>
-              <Col>price/buc: {product.price}</Col>
-              <Col>quantity :{product.quantity}</Col>
-              {product.stock === 0 && <Col>Product out of stock</Col>}
-              <Col>
-                <Button
-                  disabled={disabled}
-                  onClick={handleInsertButton}
-                  id={product.id}
-                  value={1}
-                >
-                  +
-                </Button>
+      {page === 1 && (
+        <>
+          <Container>
+            {cart?.map((product) => (
+              <Row>
+                <div key={product.id}>
+                  <Col>
+                    <img src={`/images/${product.image}`} alt={product.name} />
+                  </Col>
+                  <Col>{product.name}</Col>
+                  <Col>price/buc: {product.price}</Col>
+                  <Col>quantity :{product.quantity}</Col>
+                  {product.stock === 0 && <Col>Product out of stock</Col>}
+                  <Col>
+                    <Button
+                      disabled={disabled}
+                      onClick={handleInsertButton}
+                      id={product.id}
+                      value={1}
+                    >
+                      +
+                    </Button>
 
-                <InputGroup>
-                  <FormControl
-                    className={`w-50`}
-                    type="numeric"
-                    onChange={(e) =>
-                      setInput((prev) => ({
-                        ...prev,
-                        [product.id]: e.target.value,
-                      }))
-                    }
-                    value={input[product.id] ?? ""}
-                    onBlur={handleInsertInput}
-                    initialquantity={product.quantity}
-                    id={product.id}
-                  />
-                </InputGroup>
+                    <InputGroup>
+                      <FormControl
+                        className={`w-50`}
+                        type="numeric"
+                        onChange={(e) =>
+                          setInput((prev) => ({
+                            ...prev,
+                            [product.id]: e.target.value,
+                          }))
+                        }
+                        value={input[product.id] ?? ""}
+                        onBlur={handleInsertInput}
+                        initialquantity={product.quantity}
+                        id={product.id}
+                      />
+                    </InputGroup>
 
-                <Button
-                  disabled={disabled}
-                  onClick={handleInsertButton}
-                  id={product.id}
-                  value={-1}
-                >
-                  -
-                </Button>
-              </Col>
+                    <Button
+                      disabled={disabled}
+                      onClick={handleInsertButton}
+                      id={product.id}
+                      value={-1}
+                    >
+                      -
+                    </Button>
+                  </Col>
+                </div>
+              </Row>
+            ))}
+          </Container>
+
+          <p>{message}</p>
+          {cart.length > 0 && (
+            <div>
+              <p>Total = {total} lei </p>
             </div>
-          </Row>
-        ))}
-      </Container>
-      <p>{message}</p>
-      {cart.length > 0 && (
-        <div>
-          <p>Total = {total} lei </p>
-          <Button disabled={disabled} onClick={sendOrder}>
-            Send Order
-          </Button>
-        </div>
+          )}
+        </>
       )}
+      {page === 2 && <OrderInfo total={total} />}
+      {cart.length > 0 && getStepButton(page)}
     </div>
   );
 };

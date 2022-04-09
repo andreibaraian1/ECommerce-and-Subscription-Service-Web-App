@@ -27,7 +27,7 @@ function App() {
         <Navbar />
         {modal && <ModalLayout message={modalMessage} />}
         <div className={styles.body}>
-          <Routes>
+          <Routes onChange={Fetch}>
             <Route path="/" element={<Products />} />
             <Route path="filter/:category" element={<Products />} />
             <Route path="/products/:id" element={<ProductDetail />} />

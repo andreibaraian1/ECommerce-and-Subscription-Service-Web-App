@@ -35,10 +35,10 @@ const checkOrder = async (cartProducts, total) => {
     valid: sum === total && ok,
   };
 };
-const sendOrder = async (idUser, cart, total) => {
+const sendOrder = async (idUser, cart, total,shippingInfo) => {
   const insertOrder = await pool.query(
-    "INSERT INTO orders (id_user,products,total) VALUES ($1,$2,$3)",
-    [idUser, JSON.stringify(cart), total]
+    "INSERT INTO orders (id_user,products,total,shipping_info) VALUES ($1,$2,$3,$4)",
+    [idUser, JSON.stringify(cart), total,JSON.stringify(shippingInfo)]
   );
   cart.forEach(async (product) => {
     const payload = await getProductById(product.id);
