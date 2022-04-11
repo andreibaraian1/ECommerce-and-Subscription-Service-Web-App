@@ -1,5 +1,15 @@
 import { useState } from "react";
-import { Typography, Grid, Button, TextField, Stack } from "@mui/material";
+import {
+  Typography,
+  Grid,
+  Button,
+  TextField,
+  Stack,
+  InputLabel,
+  Select,
+  MenuItem,
+  FormControl,
+} from "@mui/material";
 import Axios from "axios";
 import Fetch from "../../api/Fetch";
 import { useNavigate } from "react-router-dom";
@@ -14,6 +24,7 @@ const OrderInfo = (props) => {
   const [country, setCountry] = useState("Romania");
   const [region, setRegion] = useState("");
   const [message, setMessage] = useState("");
+  const [paymentMethod, setPaymentMethod] = useState("Card");
   const sendOrder = async () => {
     if (!firstName || !lastName || !city || !zip || !country || !region) {
       setMessage("All values required");
@@ -29,12 +40,17 @@ const OrderInfo = (props) => {
     };
     const result = await Axios.post(
       "http://localhost:3001/order/sendOrder",
-      { shipping, total: props.total },
+      { shipping, total: props.total, paymentMethod },
       { withCredentials: true }
     );
+    console.log(result);
     if (result.status === 200) {
-      navigate("/"); //navigate to order
-      Fetch();
+      if (result.data?.url) {
+        window.location.href = result.data.url;
+      } else {
+        navigate("/"); //navigate to order
+        Fetch();
+      }
     }
   };
   return (
@@ -153,6 +169,19 @@ const OrderInfo = (props) => {
               setMessage("");
             }}
           />
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <FormControl fullWidth>
+            <InputLabel>Payment Method</InputLabel>
+            <Select
+              value={paymentMethod}
+              label="Payment Method"
+              onChange={(e) => setPaymentMethod(e.target.value)}
+            >
+              <MenuItem value={"Card"}>Card</MenuItem>
+              <MenuItem value={"Cash"}>Cash</MenuItem>
+            </Select>
+          </FormControl>
         </Grid>
       </Grid>
       <Stack direction="row" justifyContent="end">

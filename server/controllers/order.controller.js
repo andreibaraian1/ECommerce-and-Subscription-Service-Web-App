@@ -1,9 +1,9 @@
 const cartServices = require("../services/cart.services");
 const orderServices = require("../services/order.services");
-const pool = require("../db.config");
 const sendOrder = async (req, res) => {
   const total = req.body.total;
   const shippingInfo = req.body.shipping;
+  const paymentMethod = req.body.paymentMethod;
   try {
     const cart = await cartServices.getCartByUserId(req.userId);
     const idUser = req.userId;
@@ -13,10 +13,19 @@ const sendOrder = async (req, res) => {
         idUser,
         cartValidation.finalCart,
         total,
-        shippingInfo
+        shippingInfo,
+        paymentMethod
       );
       if (sendOrder) {
-        res.status(200).json("Order sent successfully");
+        if (sendOrder?.url) {
+          res.status(200).json({ url: sendOrder.url });
+        } else {
+          res.status(200).json("Order sent successfully");
+        }
+      } else {
+        res
+          .status(400)
+          .json("There was an error while sending the error. Please try again");
       }
     } else {
       res.status(400).send({
@@ -48,5 +57,5 @@ const getOrders = async (req, res) => {
 module.exports = {
   sendOrder,
   getOrders,
-  getOrderByUserId
+  getOrderByUserId,
 };

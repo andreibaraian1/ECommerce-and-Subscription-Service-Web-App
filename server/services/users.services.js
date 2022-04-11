@@ -1,6 +1,9 @@
 const pool = require("../db.config");
-const generateAccessToken = require("../middleware/generateAccessToken.middleware");
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+const dotenv = require("dotenv");
+dotenv.config();
+
 const login = async (username, password) => {
   const result = await pool.query("SELECT * FROM USERS WHERE username=$1", [
     username,
@@ -66,8 +69,19 @@ const register = async (username, password, email) => {
     }
   }
 };
-
+const generateAccessToken = (user) => {
+  return jwt.sign(
+    {
+      username: user.username,
+      id: user.id,
+      role: user.role,
+    },
+    process.env.TOKEN_SECRET,
+    { expiresIn: "24h" }
+  );
+};
 module.exports = {
   login,
   register,
+  generateAccessToken,
 };

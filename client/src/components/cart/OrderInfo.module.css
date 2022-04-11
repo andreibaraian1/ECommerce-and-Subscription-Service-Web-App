@@ -1,4 +1,7 @@
 .errorMessage {
-    padding: 2%;
-    color:red;
+  padding: 2%;
+  color: red;
+}
+.input {
+  display: block;
 }
