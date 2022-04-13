@@ -30,13 +30,8 @@ const webhook = async (req, res) => {
 
   res.status(200);
 };
-const getIntents = async (req, res) => {
-  const result = await orderServices.checkStripePayments();
-
-  return res.status(200).json(result);
-};
 
 module.exports = {
   webhook,
-  getIntents,
+
 };
