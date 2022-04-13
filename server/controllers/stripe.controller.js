@@ -22,20 +22,21 @@ const webhook = async (req, res) => {
     case "checkout.session.completed":
       fulfillOrder("Completed", session);
       break;
-    case "checkout.sesion.failed":
-      fulfillOrder("Failed", session);
+    case "checkout.sesion.expired":
+      fulfillOrder("Canceled", session);
     default:
       console.log(event.type, "event not tracked");
   }
 
   res.status(200);
 };
-const getIntents = async(req,res) => {
-    const paymentIntents = await stripe.paymentIntents.list();
-    return res.status(200).json(paymentIntents);
-      
-}
+const getIntents = async (req, res) => {
+  const result = await orderServices.checkStripePayments();
+
+  return res.status(200).json(result);
+};
+
 module.exports = {
   webhook,
-  getIntents
+  getIntents,
 };

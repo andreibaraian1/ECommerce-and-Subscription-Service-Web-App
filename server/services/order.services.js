@@ -8,8 +8,7 @@ const {
 const dotenv = require("dotenv");
 dotenv.config();
 
-const Stripe = require("stripe");
-const stripe = Stripe(process.env.STRIPE_KEY);
+const stripe = require("stripe")(process.env.STRIPE_KEY);
 
 const checkOrder = async (cartProducts, total) => {
   const products = await getProducts();
@@ -68,7 +67,6 @@ const sendOrder = async (idUser, cart, total, shippingInfo, paymentMethod) => {
         shippingInfo,
         "Processing",
         session.payment_intent
-
       );
       return { valid, url: session.url };
     case "Cash":
@@ -84,10 +82,24 @@ const sendOrder = async (idUser, cart, total, shippingInfo, paymentMethod) => {
       console.log("Payment method not valid");
   }
 };
-const insertOrder = async (idUser, cart, total, shippingInfo, status, paymentInt = null) => {
+const insertOrder = async (
+  idUser,
+  cart,
+  total,
+  shippingInfo,
+  status,
+  paymentInt = null
+) => {
   const insertOrder = await pool.query(
     "INSERT INTO orders (id_user,products,total,shipping_info,status,payment_int) VALUES ($1,$2,$3,$4,$5,$6)",
-    [idUser, JSON.stringify(cart), total, JSON.stringify(shippingInfo), status ,paymentInt]
+    [
+      idUser,
+      JSON.stringify(cart),
+      total,
+      JSON.stringify(shippingInfo),
+      status,
+      paymentInt,
+    ]
   );
   cart.forEach(async (product) => {
     const payload = await getProductById(product.id);
@@ -115,16 +127,40 @@ const getOrders = async () => {
   const { rows } = await pool.query("SELECT * FROM ORDERS");
   return rows;
 };
-const editOrderStatus = async(status,paymentInt) => {
-  await pool.query(
-    "UPDATE ORDERS SET status=$1 WHERE payment_int=$2",
-    [status, paymentInt]
-  );
-}
+const editOrderStatus = async (status, paymentInt) => {
+  await pool.query("UPDATE ORDERS SET status=$1 WHERE payment_int=$2", [
+    status,
+    paymentInt,
+  ]);
+};
+const checkStripePayments = async () => {
+  const paymentIntents = await stripe.paymentIntents.list();
+  const intents = paymentIntents.data;
+  const orders = await getOrders();
+  let canceledOrders = [];
+  for (const paymentIntent of intents) {
+    const canceledOrder = orders.find(
+      (order) =>
+        order.status === "Processing" &&
+        order.payment_int === paymentIntent.id &&
+        paymentIntent.status === "canceled"
+    );  // find cancelled intents in orders
+    if (canceledOrder) {
+      canceledOrders = [...canceledOrders, canceledOrder];
+    }
+  }
+  for(const canceledOrder of canceledOrders) {
+    await editOrderStatus('Canceled',canceledOrder.payment_int)
+  }
+ console.log('Check stripe intents finished');
+  
+};
+
 module.exports = {
   checkOrder,
   sendOrder,
   getOrderByUserId,
   getOrders,
-  editOrderStatus
+  editOrderStatus,
+  checkStripePayments,
 };
