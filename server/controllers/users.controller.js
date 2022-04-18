@@ -1,3 +1,4 @@
+const pool = require("../db.config");
 const userServices = require("../services/users.services");
 const login = async (req, res) => {
   try {
@@ -49,9 +50,22 @@ const getUser = (req, res) => {
     res.status(500).send("Unexpected error");
   }
 };
+const getUserInfo = async (req, res) => {
+  const userId = req.userId;
+  try {
+    const userQuery = await pool.query(
+      "SELECT id, username, email, address, telephone, role, date_joined, subscription, first_name, last_name, city, state, zipcode, country FROM USERS WHERE id=$1",
+      [userId]
+    );
+    return res.status(200).json(userQuery.rows[0]);
+  } catch (err) {
+    res.status(500).send("Unexpected error");
+  }
+};
 module.exports = {
   login,
   register,
   logout,
   getUser,
+  getUserInfo,
 };

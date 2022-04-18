@@ -1,27 +1,35 @@
-import { useState } from "react";
+import Avatar from "@mui/material/Avatar";
+import Button from "@mui/material/Button";
+import CssBaseline from "@mui/material/CssBaseline";
+import TextField from "@mui/material/TextField";
+import Paper from "@mui/material/Paper";
+import Box from "@mui/material/Box";
+import Grid from "@mui/material/Grid";
+import Typography from "@mui/material/Typography";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { useState, useEffect } from "react";
 import Axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { setUser } from "../../actions";
-import styles from './Login.module.css';
-const Login = (props) => {
+import { Link } from "react-router-dom";
+import image from "../../images/1.jpg";
+const theme = createTheme();
+
+const Login = () => {
+  useEffect(() => {
+    document.body.style.overflow = "hidden";
+  }, []);
   const dispatch = useDispatch();
-  const user = useSelector((state) => state.user);
+  const navigate = useNavigate();
   const [usernameLog, setUsernameLog] = useState("");
   const [passwordLog, setPasswordLog] = useState("");
-  const [message, setMessage] = useState("");
-  const navigate = useNavigate();
-  const gotoLogout = () => {
-    navigate("/logout");
-  };
-  const handleKeyDown = (event) => {
-    if (event.key === "Enter") {
-      login();
-    }
-  };
-  const login = async (event) => {
+  const [error, setError] = useState(false);
+  const [errorMessage,setErrorMessage] = useState('');
+  const handleSubmit = async (event) => {
     event?.preventDefault();
     if (usernameLog.trim().length === 0 || passwordLog.trim().length === 0) {
+      setError(true);
       return;
     }
     const login = await Axios.post(
@@ -34,55 +42,115 @@ const Login = (props) => {
     );
 
     if (login.data?.error) {
-      return setMessage(login.data.error);
-    } 
+      setErrorMessage(login.data.error);
+      setError(true);
+      return;
+    }
     setUsernameLog("");
     setPasswordLog("");
     Axios.get("http://localhost:3001/users/getUser", {
       withCredentials: true,
     }).then((res) => {
       dispatch(setUser(res.data.user));
-      navigate('/');
+      navigate("/shop");
     });
   };
+
   return (
-    <div className={styles.body}>
-      {!user && (
-        <form onSubmit={login}>
-          <h1>Login</h1>
-          <input
-            type="text"
-            placeholder="Username"
-            onChange={(e) => {
-              setUsernameLog(e.target.value);
+    <ThemeProvider theme={theme}>
+      <Grid container component="main" sx={{ height: "100vh" }}>
+        <CssBaseline />
+        <Grid
+          item
+          xs={false}
+          sm={4}
+          md={7}
+          sx={{
+            backgroundImage: `url(${image})`,
+            backgroundRepeat: "no-repeat",
+            backgroundColor: (t) =>
+              t.palette.mode === "light"
+                ? t.palette.grey[50]
+                : t.palette.grey[900],
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+          }}
+        />
+        <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
+          <Box
+            sx={{
+              my: 8,
+              mx: 4,
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
             }}
-            onKeyUp={handleKeyDown}
-            value={usernameLog}
-          />
-          <input
-            type="password"
-            placeholder="Password"
-            onChange={(e) => {
-              setPasswordLog(e.target.value);
-            }}
-            onKeyDown={handleKeyDown}
-            value={passwordLog}
-          />
-          <input type="submit" value="Login"></input>
-        </form>
-      )}
-      <div className="testUser">
-        {user && (
-          <div>
-            <h1>username:{user.username}</h1>
-          </div>
-        )}
-      </div>
-      <div>
-        <button onClick={gotoLogout}>Logout</button>
-        <h1>{message}</h1>
-      </div>
-    </div>
+          >
+            <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}></Avatar>
+            <Typography component="h1" variant="h5">
+              Sign in
+            </Typography>
+            {errorMessage && <Typography component="caption" variant="h6" color='error'>{errorMessage}</Typography>}
+            <Box
+              component="form"
+              noValidate
+              onSubmit={handleSubmit}
+              sx={{ mt: 1 }}
+            >
+              <TextField
+                margin="normal"
+                required
+                error={error}
+                fullWidth
+                id="username"
+                label="Username"
+                name="username"
+                autoComplete="username"
+                autoFocus
+                value={usernameLog}
+                onChange={(e) => {
+                  setUsernameLog(e.target.value);
+                  setError(false);
+                  setErrorMessage('');
+                }}
+              />
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                error={error}
+                name="password"
+                label="Password"
+                type="password"
+                id="password"
+                autoComplete="current-password"
+                value={passwordLog}
+                onChange={(e) => {
+                  setPasswordLog(e.target.value);
+                  setError(false);
+                  setErrorMessage('');
+                }}
+              />
+
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                sx={{ mt: 3, mb: 2 }}
+              >
+                Sign In
+              </Button>
+              <Grid container>
+                <Grid item xs></Grid>
+                <Grid item>
+                  <Link to="/register">Don't have an account? Sign Up</Link>
+                </Grid>
+              </Grid>
+            </Box>
+          </Box>
+        </Grid>
+      </Grid>
+    </ThemeProvider>
   );
 };
 export default Login;

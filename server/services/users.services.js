@@ -17,7 +17,7 @@ const login = async (username, password) => {
     //   res.status(200).send("Username does not exist");
     return {
       status: 200,
-      error: "Username does not exist",
+      error: "Incorrect username or password",
     };
   } else {
     const user = result.rows[0];
@@ -34,7 +34,7 @@ const login = async (username, password) => {
     }
     return {
       status: 200,
-      error: "Passwords do not match",
+      error: "Incorrect username or password",
     };
   }
 };
@@ -80,26 +80,28 @@ const generateAccessToken = (user) => {
     { expiresIn: "24h" }
   );
 };
-const manageSubscription = async(userId,time) => {
+const manageSubscription = async (userId, time) => {
   const userQuery = await pool.query("SELECT * FROM USERS WHERE id=$1", [
     userId,
   ]);
   let newDate;
   const user = userQuery.rows[0];
-  if(user?.subscription) {
+  if (user?.subscription) {
     date = new Date(user.subscription);
 
-    newDate = new Date(date.getTime()+(time*24*60*60*1000));
-
+    newDate = new Date(date.getTime() + time * 24 * 60 * 60 * 1000);
   } else {
-    newDate = new Date(new Date().getTime()+(time*24*60*60*1000));
+    newDate = new Date(new Date().getTime() + time * 24 * 60 * 60 * 1000);
   }
   console.log(newDate);
-  await pool.query("UPDATE USERS SET subscription=$1 WHERE id=$2",[JSON.stringify(newDate),userId])
-}
+  await pool.query("UPDATE USERS SET subscription=$1 WHERE id=$2", [
+    JSON.stringify(newDate),
+    userId,
+  ]);
+};
 module.exports = {
   login,
   register,
   generateAccessToken,
-  manageSubscription
+  manageSubscription,
 };

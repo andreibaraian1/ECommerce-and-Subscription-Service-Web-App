@@ -6,11 +6,11 @@ const Navbar = () => {
   const user = useSelector((state) => state.user);
   return (
     <div>
-      <Navi fixed="top" bg="dark" variant="dark" className={styles.navbar}>
+      <Navi sticky="top" bg="dark" variant="dark" className={styles.navbar} >
         <Container>
           <Navi.Brand>
             <Link className={styles.navbarLink} to="/">
-              Home
+              Power Gym
             </Link>
           </Navi.Brand>
           <Navi.Toggle aria-controls="responsive-navbar-nav" />

@@ -18,6 +18,7 @@ import Orders from "./components/orders/Orders";
 import styles from "./App.module.css";
 import Home from "./components/home/Home";
 import About from "./components/home/About";
+import Profile from "./components/profile/Profile";
 function App() {
   const modal = useSelector((state) => state.modal);
   const modalMessage = useSelector((state) => state.modalMessage);
@@ -28,8 +29,7 @@ function App() {
       <Router>
         <Navbar />
         {modal && <ModalLayout message={modalMessage} />}
-
-        <Routes onChange={Fetch}>
+        <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
           <Route path="/shop" element={<Products />} />
@@ -38,6 +38,7 @@ function App() {
           <Route path="register" element={<Register />} />
           <Route path="login" element={<Login />} />
           <Route path="logout" element={<Logout />} />
+          <Route path="/profile" element={<Profile />} />
           <Route path="cart" element={<Cart />} />
           <Route path="orders" element={<Orders />} />
           <Route path="*" element={<Navigate replace to="/" />} />

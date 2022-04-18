@@ -38,7 +38,6 @@ const Products: React.FC = () => {
 
   return (
     <div className={styles.body}>
-      {category.category && <p>Products category : {category.category}</p>}
       <Container className={styles.products}>
         <Row>
           <Col md="2">
@@ -47,7 +46,7 @@ const Products: React.FC = () => {
                 <p>Remove filters</p>
               </Link>
             )}
-            <ProductsCategories/>
+            <ProductsCategories />
           </Col>
           <Col>
             <Row>
