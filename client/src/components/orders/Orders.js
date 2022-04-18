@@ -26,7 +26,7 @@ const Orders = () => {
   },[dispatch,navigate]);
 
   return (
-    <div className={styles.orders}>
+    <div className={styles.body}>
       <Table striped bordered hover>
         <thead>
           <tr>

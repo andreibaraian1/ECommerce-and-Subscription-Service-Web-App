@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { Col, Container, FormControl, InputGroup, Row } from "react-bootstrap";
 import { Button, Stack } from "@mui/material";
 import OrderInfo from "./OrderInfo";
-// import styles from "./Cart.module.css";
+import styles from "./Cart.module.css";
 const Cart = (props) => {
   const navigate = useNavigate();
   const products = useSelector((state) => state.products);
@@ -123,7 +123,7 @@ const Cart = (props) => {
     }
   };
   return (
-    <div>
+    <div className={styles.body}>
       {page === 1 && (
         <>
           <Container>

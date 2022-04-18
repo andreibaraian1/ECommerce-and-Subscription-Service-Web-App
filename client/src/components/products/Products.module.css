@@ -2,6 +2,8 @@
 .products {
   display: block;
 }
-.categories {
-  display: block;
+.body {
+  padding-top:5%;
+  margin: auto;
+  width: 100%;
 }

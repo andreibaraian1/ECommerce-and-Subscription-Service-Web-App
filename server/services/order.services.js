@@ -4,6 +4,7 @@ const {
   updateQuantityById,
   getProductById,
 } = require("./products.services");
+const { manageSubscription } = require("./users.services");
 
 const dotenv = require("dotenv");
 dotenv.config();
@@ -24,6 +25,8 @@ const checkOrder = async (cartProducts, total) => {
       name: product.name,
       stock: product.stock,
       price: product.price,
+      category: product.category,
+      details: product.details,
       idCart: product.idCart,
     };
   });
@@ -106,10 +109,17 @@ const insertOrder = async (
     const stock = payload.stock - product.quantity;
     updateQuantityById(product.id, stock);
   });
+
   for (const product in cart) {
     const payload = cart[product];
 
     await pool.query("DELETE FROM cart WHERE id=$1", [payload.idCart]);
+  }
+  for (const product in cart) {
+    const payload = cart[product];
+    if (payload.category === "subscription" && paymentInt!=null) {
+      manageSubscription(cd );
+    }
   }
 
   if (insertOrder.rowCount) {
@@ -144,16 +154,15 @@ const checkStripePayments = async () => {
         order.status === "Processing" &&
         order.payment_int === paymentIntent.id &&
         paymentIntent.status === "canceled"
-    );  // find cancelled intents in orders
+    ); // find cancelled intents in orders
     if (canceledOrder) {
       canceledOrders = [...canceledOrders, canceledOrder];
     }
   }
-  for(const canceledOrder of canceledOrders) {
-    await editOrderStatus('Canceled',canceledOrder.payment_int)
+  for (const canceledOrder of canceledOrders) {
+    await editOrderStatus("Canceled", canceledOrder.payment_int);
   }
- console.log('Check stripe intents finished');
-  
+  console.log("Check stripe intents finished");
 };
 
 module.exports = {

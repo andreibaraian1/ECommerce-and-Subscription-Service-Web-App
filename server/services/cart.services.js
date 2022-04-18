@@ -58,7 +58,7 @@ const insertCart = async (userId, product, cart) => {
     }
   } catch (err) {
     console.log(err);
-    return { status: 500, error: error };
+    return { status: 500, error: err };
   }
 };
 module.exports = {

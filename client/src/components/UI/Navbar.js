@@ -6,7 +6,7 @@ const Navbar = () => {
   const user = useSelector((state) => state.user);
   return (
     <div>
-      <Navi fixed='top' bg="dark"  variant="dark" className={styles.navbar}>
+      <Navi fixed="top" bg="dark" variant="dark" className={styles.navbar}>
         <Container>
           <Navi.Brand>
             <Link className={styles.navbarLink} to="/">
@@ -16,14 +16,14 @@ const Navbar = () => {
           <Navi.Toggle aria-controls="responsive-navbar-nav" />
 
           <Nav className="me-auto">
-            <Link className={styles.navbarLink} to="/cart">
-              Cart
+            <Link className={styles.navbarLink} to="/shop">
+              Shop
             </Link>
-
-            <Link className={styles.navbarLink} to="/orders">
-              Orders
+            <Link className={styles.navbarLink} to="/about">
+              About
             </Link>
           </Nav>
+
           {!user && (
             <Nav className={styles.navRight}>
               <Link className={styles.navbarLink} to="/login">
@@ -37,6 +37,13 @@ const Navbar = () => {
           )}
           {user && (
             <Nav className={styles.navRight}>
+              <Link className={styles.navbarLink} to="/cart">
+                Cart
+              </Link>
+
+              <Link className={styles.navbarLink} to="/orders">
+                Orders
+              </Link>
               <Link className={styles.navbarLink} to="/profile">
                 Profile
               </Link>

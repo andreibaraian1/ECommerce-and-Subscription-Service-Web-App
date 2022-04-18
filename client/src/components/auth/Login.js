@@ -3,6 +3,7 @@ import Axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { setUser } from "../../actions";
+import styles from './Login.module.css';
 const Login = (props) => {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user);
@@ -45,7 +46,7 @@ const Login = (props) => {
     });
   };
   return (
-    <div>
+    <div className={styles.body}>
       {!user && (
         <form onSubmit={login}>
           <h1>Login</h1>
@@ -55,7 +56,7 @@ const Login = (props) => {
             onChange={(e) => {
               setUsernameLog(e.target.value);
             }}
-            onKeyDown={handleKeyDown}
+            onKeyUp={handleKeyDown}
             value={usernameLog}
           />
           <input

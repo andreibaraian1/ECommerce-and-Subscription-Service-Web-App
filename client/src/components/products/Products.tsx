@@ -3,20 +3,32 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Container from "react-bootstrap/Container";
 import styles from "./Products.module.css";
-import { useSelector } from "react-redux";
+import { RootStateOrAny, useSelector } from "react-redux";
+//@ts-ignore
 import ProductsCategories from "./ProductsCategories";
 import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
-const Products = (props) => {
-  const [filteredItems, setFilteredItems] = useState(null);
+
+interface product {
+  id: number;
+  image: string;
+  name: string;
+  price: number;
+  stock: number;
+  category: string;
+}
+const Products: React.FC = () => {
+  const [filteredItems, setFilteredItems] = useState<Array<product> | null>(
+    null
+  );
   const category = useParams();
-  const products = useSelector((state) => state.products);
+  const products = useSelector((state: RootStateOrAny) => state.products);
   useEffect(() => {
-    const prod = products?.sort((a, b) => b.stock - a.stock);
+    const prod = products?.sort((a: product, b: product) => b.stock - a.stock);
     if (prod) {
       if (category.category) {
-        const filtered = prod.filter((product) => {
+        const filtered = prod.filter((product: product) => {
           return product.category === category.category;
         });
         setFilteredItems(filtered);
@@ -25,21 +37,21 @@ const Products = (props) => {
   }, [category.category, products]);
 
   return (
-    <div>
+    <div className={styles.body}>
       {category.category && <p>Products category : {category.category}</p>}
       <Container className={styles.products}>
         <Row>
           <Col md="2">
             {category.category && (
-              <Link to={`/`}>
+              <Link to={`/shop`}>
                 <p>Remove filters</p>
               </Link>
             )}
-            <ProductsCategories classname={styles.categories} />
+            <ProductsCategories/>
           </Col>
           <Col>
             <Row>
-              {filteredItems?.map((product) => (
+              {filteredItems?.map((product: product) => (
                 <Col md="4" key={product.id}>
                   <Product key={product.id} product={product} />
                 </Col>

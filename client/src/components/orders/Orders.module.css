@@ -2,3 +2,8 @@
     display:inline;
     margin: 25px;
 }
+.body {
+    padding-top:5%;
+    margin: auto;
+    width: 100%;
+}

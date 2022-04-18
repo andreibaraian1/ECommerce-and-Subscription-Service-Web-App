@@ -6,11 +6,18 @@ import { setModal, setModalMessage } from "../../actions";
 import { Card, Button, Form } from "react-bootstrap";
 import { Input } from "@mui/material";
 import styles from './ProductDetail.module.css';
-const ProductDetail = ({ match }) => {
+interface product {
+  id:number,
+  image:string,
+  name:string,
+  price:number,
+  stock:number,
+}
+const ProductDetail:React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { id } = useParams();
-  const [product, setProduct] = useState([]);
+  const [product, setProduct]  = useState<product>({} as any);
   const [quantity, setQuantity] = useState(1);
 
   useEffect(() => {
@@ -23,12 +30,12 @@ const ProductDetail = ({ match }) => {
     };
     fetchProduct();
   }, [id]);
-  const addtocart = async (event) => {
+  const addtocart = async (event:any) => {
     event.preventDefault();
     const { id } = product;
     const cartProduct = {
       id: id,
-      quantity: parseInt(quantity),
+      quantity: quantity,
     };
     const insertCart = await Axios.post(
       "http://localhost:3001/cart/insertCart",
@@ -66,8 +73,8 @@ const ProductDetail = ({ match }) => {
         <Form>
           <Input
             type="number"
-            onChange={(e) => {
-              setQuantity(e.target.value);
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+              setQuantity(Number(e.target.value));
             }}
             value={quantity}
           ></Input>

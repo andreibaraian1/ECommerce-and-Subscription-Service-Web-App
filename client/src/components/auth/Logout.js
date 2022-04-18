@@ -2,6 +2,7 @@ import Axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setUser } from "../../actions";
+import styles from './Login.module.css';
 const Logout = (props) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -18,7 +19,7 @@ const Logout = (props) => {
   };
   //TODO modal for logout
   return (
-    <div>
+    <div className={styles.body}>
       <h1>Are you sure you want to log out ?</h1>
       <button onClick={getLogout}>Yes</button>
     </div>

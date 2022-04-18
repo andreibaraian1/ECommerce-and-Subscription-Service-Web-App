@@ -16,6 +16,8 @@ import ModalLayout from "./components/UI/ModalLayout";
 import Fetch from "./api/Fetch";
 import Orders from "./components/orders/Orders";
 import styles from "./App.module.css";
+import Home from "./components/home/Home";
+import About from "./components/home/About";
 function App() {
   const modal = useSelector((state) => state.modal);
   const modalMessage = useSelector((state) => state.modalMessage);
@@ -26,19 +28,20 @@ function App() {
       <Router>
         <Navbar />
         {modal && <ModalLayout message={modalMessage} />}
-        <div className={styles.body}>
-          <Routes onChange={Fetch}>
-            <Route path="/" element={<Products />} />
-            <Route path="filter/:category" element={<Products />} />
-            <Route path="/products/:id" element={<ProductDetail />} />
-            <Route path="register" element={<Register />} />
-            <Route path="login" element={<Login />} />
-            <Route path="logout" element={<Logout />} />
-            <Route path="cart" element={<Cart />} />
-            <Route path="orders" element={<Orders />} />
-            <Route path="*" element={<Navigate replace to="/" />} />
-          </Routes>
-        </div>
+
+        <Routes onChange={Fetch}>
+          <Route path="/" element={<Home />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/shop" element={<Products />} />
+          <Route path="/shop/filter/:category" element={<Products />} />
+          <Route path="/products/:id" element={<ProductDetail />} />
+          <Route path="register" element={<Register />} />
+          <Route path="login" element={<Login />} />
+          <Route path="logout" element={<Logout />} />
+          <Route path="cart" element={<Cart />} />
+          <Route path="orders" element={<Orders />} />
+          <Route path="*" element={<Navigate replace to="/" />} />
+        </Routes>
       </Router>
     </div>
   );

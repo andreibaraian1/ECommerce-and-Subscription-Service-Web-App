@@ -1,5 +1,6 @@
 import { useState } from "react";
 import Axios from "axios";
+import styles from './Login.module.css';
 const Register = (props) => {
   const [usernameReg, setUsernameReg] = useState("");
   const [passwordReg, setPasswordReg] = useState("");
@@ -31,7 +32,7 @@ const Register = (props) => {
     }
   };
   return (
-    <div>
+    <div className={styles.body}>
       <form onSubmit={register}>
         <h1>Registration</h1>
         <label>Email</label>

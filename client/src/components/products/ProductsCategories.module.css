@@ -1,3 +1,18 @@
-.category {
-    margin:5%;
+
+.category a {
+  text-decoration: none;
+
+  padding: 12px 25px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+}
+.category a:hover {
+    background-color: white;
+}
+.currentLink {
+  color: blue;
+}
+.link {
+  color: black;
 }
