@@ -62,10 +62,35 @@ const getUserInfo = async (req, res) => {
     res.status(500).send("Unexpected error");
   }
 };
+const updateUserInfo = async (req, res) => {
+  try {
+    const user = req.body.user;
+    const userId = req.userId;
+    const updateInfo = await pool.query(
+      "UPDATE users SET first_name=$1, last_name=$2,telephone=$3,address=$4,city=$5,country=$6,zipcode=$7,state=$8 WHERE id=$9",
+      [
+        user.firstName,
+        user.lastName,
+        user.telephone,
+        user.address,
+        user.city,
+        user.country,
+        user.zipcode,
+        user.state,
+        userId,
+      ]
+    );
+    res.status(200).json({ message: "User info updated" });
+  } catch (err) {
+    res.status(500).send("Unexpected error");
+    console.log(err);
+  }
+};
 module.exports = {
   login,
   register,
   logout,
   getUser,
   getUserInfo,
+  updateUserInfo,
 };
