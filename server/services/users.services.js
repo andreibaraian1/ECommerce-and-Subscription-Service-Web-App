@@ -93,7 +93,6 @@ const manageSubscription = async (userId, time) => {
   } else {
     newDate = new Date(new Date().getTime() + time * 24 * 60 * 60 * 1000);
   }
-  console.log(newDate);
   await pool.query("UPDATE USERS SET subscription=$1 WHERE id=$2", [
     JSON.stringify(newDate),
     userId,

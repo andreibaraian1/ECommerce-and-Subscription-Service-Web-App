@@ -11,6 +11,7 @@ const Profile = () => {
   const navigate = useNavigate();
   const [user, setUser] = useState({});
   const [subscription, setSubscription] = useState(false);
+  const [subscriptionDate,setSubscriptionDate] = useState('');
   //form states
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -36,6 +37,7 @@ const Profile = () => {
         const subscriptionDate = new Date(res.data.subscription);
         if (subscriptionDate > today) {
           setSubscription(true);
+          setSubscriptionDate(subscriptionDate.toLocaleDateString('en-GB'))
         }
       }
     });
@@ -75,7 +77,14 @@ const Profile = () => {
         <Col>
           <Typography variant="h5">User {user.username}</Typography>
           <Typography variant="h5">
-            {subscription ? "Subscription active" : "No subscription active"}
+            {subscription ? (
+              <div>
+                <p>Subscription active</p>
+                <p>Expires in {subscriptionDate}</p>
+              </div>
+            ) : (
+              <div>No subscription active</div>
+            )}
           </Typography>
         </Col>
         <Col>
@@ -116,7 +125,6 @@ const Profile = () => {
           <TextField
             style={{ width: "200px", margin: "5px" }}
             type="text"
-            label="email"
             variant="outlined"
             value={user.email}
           />

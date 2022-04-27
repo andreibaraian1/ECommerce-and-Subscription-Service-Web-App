@@ -2,11 +2,12 @@ import { Link } from "react-router-dom";
 import styles from "./Navbar.module.css";
 import { useSelector } from "react-redux";
 import { Navbar as Navi, Container, Nav } from "react-bootstrap";
+
 const Navbar = () => {
   const user = useSelector((state) => state.user);
   return (
     <div>
-      <Navi sticky="top" bg="dark" variant="dark" className={styles.navbar} >
+      <Navi sticky="top" bg="dark" variant="dark" className={styles.navbar}>
         <Container>
           <Navi.Brand>
             <Link className={styles.navbarLink} to="/">
@@ -37,6 +38,11 @@ const Navbar = () => {
           )}
           {user && (
             <Nav className={styles.navRight}>
+              {user.role === 1 && (
+                <Link className={styles.navbarLink} to="/admin">
+                  Admin Panel
+                </Link>
+              )}
               <Link className={styles.navbarLink} to="/cart">
                 Cart
               </Link>

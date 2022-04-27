@@ -115,13 +115,6 @@ const insertOrder = async (
 
     await pool.query("DELETE FROM cart WHERE id=$1", [payload.idCart]);
   }
-  for (const product in cart) {
-    const payload = cart[product];
-    if (payload.category === "subscription" && paymentInt!=null) {
-      manageSubscription(cd );
-    }
-  }
-
   if (insertOrder.rowCount) {
     return true;
   }
@@ -138,6 +131,19 @@ const getOrders = async () => {
   return rows;
 };
 const editOrderStatus = async (status, paymentInt) => {
+  if (status === "Completed") {
+    const { rows } = await pool.query(
+      "SELECT * FROM ORDERS WHERE payment_int=$1",
+      [paymentInt]
+    );
+    const products = rows[0].products;
+    const userId = rows[0].id_user;
+    for (const product of products) {
+      if (product.category === "subscription") {
+        manageSubscription(userId, product.details);
+      }
+    }
+  }
   await pool.query("UPDATE ORDERS SET status=$1 WHERE payment_int=$2", [
     status,
     paymentInt,
@@ -148,6 +154,7 @@ const checkStripePayments = async () => {
   const intents = paymentIntents.data;
   const orders = await getOrders();
   let canceledOrders = [];
+  let completedOrders = [];
   for (const paymentIntent of intents) {
     const canceledOrder = orders.find(
       (order) =>
@@ -155,12 +162,33 @@ const checkStripePayments = async () => {
         order.payment_int === paymentIntent.id &&
         paymentIntent.status === "canceled"
     ); // find cancelled intents in orders
+
+    const completedOrder = orders.find(
+      (order) =>
+        order.status === "Processing" &&
+        order.payment_int === paymentIntent.id &&
+        paymentIntent.status === "succeeded"
+    );
+
     if (canceledOrder) {
       canceledOrders = [...canceledOrders, canceledOrder];
+    }
+    if (completedOrder) {
+      completedOrders = [...completedOrders, completedOrder];
     }
   }
   for (const canceledOrder of canceledOrders) {
     await editOrderStatus("Canceled", canceledOrder.payment_int);
+  }
+  for (const completedOrder of completedOrders) {
+    await editOrderStatus("Completed", completedOrder.payment_int);
+    const products = completedOrder.products;
+    const userId = completedOrder.id_user;
+    for (const product of products) {
+      if (product.category === "subscription") {
+        manageSubscription(userId, product.details);
+      }
+    }
   }
   console.log("Check stripe intents finished");
 };

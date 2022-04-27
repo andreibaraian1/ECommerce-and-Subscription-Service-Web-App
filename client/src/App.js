@@ -19,6 +19,7 @@ import styles from "./App.module.css";
 import Home from "./components/home/Home";
 import About from "./components/home/About";
 import Profile from "./components/profile/Profile";
+import AdminPanel from "./components/adminPanel/AdminPanel";
 function App() {
   const modal = useSelector((state) => state.modal);
   const modalMessage = useSelector((state) => state.modalMessage);
@@ -41,6 +42,7 @@ function App() {
           <Route path="/profile" element={<Profile />} />
           <Route path="cart" element={<Cart />} />
           <Route path="orders" element={<Orders />} />
+          <Route path="/admin" element={<AdminPanel />} />
           <Route path="*" element={<Navigate replace to="/" />} />
         </Routes>
       </Router>
