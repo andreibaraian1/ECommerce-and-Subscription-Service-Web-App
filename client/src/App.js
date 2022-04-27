@@ -20,6 +20,7 @@ import Home from "./components/home/Home";
 import About from "./components/home/About";
 import Profile from "./components/profile/Profile";
 import AdminPanel from "./components/adminPanel/AdminPanel";
+
 function App() {
   const modal = useSelector((state) => state.modal);
   const modalMessage = useSelector((state) => state.modalMessage);
@@ -32,17 +33,17 @@ function App() {
         {modal && <ModalLayout message={modalMessage} />}
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/shop" element={<Products />} />
-          <Route path="/shop/filter/:category" element={<Products />} />
-          <Route path="/products/:id" element={<ProductDetail />} />
+          <Route path="about" element={<About />} />
+          <Route path="shop" element={<Products />} />
+          <Route path="shop/filter/:category" element={<Products />} />
+          <Route path="products/:id" element={<ProductDetail />} />
           <Route path="register" element={<Register />} />
           <Route path="login" element={<Login />} />
           <Route path="logout" element={<Logout />} />
-          <Route path="/profile" element={<Profile />} />
+          <Route path="profile" element={<Profile />} />
           <Route path="cart" element={<Cart />} />
           <Route path="orders" element={<Orders />} />
-          <Route path="/admin" element={<AdminPanel />} />
+          <Route path="admin" element={<AdminPanel />} />
           <Route path="*" element={<Navigate replace to="/" />} />
         </Routes>
       </Router>

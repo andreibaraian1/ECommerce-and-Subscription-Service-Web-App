@@ -1,5 +1,6 @@
 const cartServices = require("../services/cart.services");
 const orderServices = require("../services/order.services");
+const pool = require("../db.config");
 const sendOrder = async (req, res) => {
   const total = req.body.total;
   const shippingInfo = req.body.shipping;
@@ -54,8 +55,42 @@ const getOrders = async (req, res) => {
     res.status(500).send("Unexpected error");
   }
 };
+const updateOrderStatus = async (req, res) => {
+  const id = req.body[0].id;
+  const status = req.body[0].shipping_status;
+  if (req.role === 0) {
+    return res.status(200).send({ error: "Not admin" });
+  }
+  try {
+    await pool.query("UPDATE ORDERS SET shipping_status=$1 WHERE id=$2", [
+      status,
+      id,
+    ]);
+    res.status(200).send("Order updated");
+  } catch (err) {
+    res.status(500).send("Unexpected error");
+  }
+};
+const deleteOrder = async (req, res) => {
+  const role = req.role;
+  if (role === 0) {
+    return res.status(200).send("User is not admin");
+  }
+  const id = +req.params.id;
+
+  try {
+    await pool.query("DELETE FROM orders WHERE id=$1", [
+      id,
+    ]);
+    res.status(200).send("Order deleted");
+  } catch (err) {
+    res.status(500).send("Unexpected error");
+  }
+};
 module.exports = {
   sendOrder,
   getOrders,
   getOrderByUserId,
+  updateOrderStatus,
+  deleteOrder
 };

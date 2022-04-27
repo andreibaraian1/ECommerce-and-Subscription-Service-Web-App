@@ -49,9 +49,36 @@ const deleteProduct = async (req, res) => {
   const id = +req.params.id;
   console.log(id);
   try {
-    const deleteProduct = await pool.query("DELETE FROM products WHERE id=$1", [id]);
+    const deleteProduct = await pool.query("DELETE FROM products WHERE id=$1", [
+      id,
+    ]);
     console.log(deleteProduct);
     res.status(200).send("Product deleted");
+  } catch (err) {
+    res.status(500).send("Unexpected error");
+  }
+};
+const addProduct = async (req, res) => {
+  const role = req.role;
+  const product = req.body[0];
+  if (role === 0) {
+    return res.status(200).send("User is not admin");
+  }
+  console.log(product);
+  try {
+    const insertProduct = await pool.query(
+      "INSERT INTO products (name,stock,image,price,category,details) VALUES ($1,$2,$3,$4,$5,$6)",
+      [
+        product.name,
+        product.stock,
+        product.image,
+        product.price,
+        product.category,
+        product.details,
+      ]
+    );
+    console.log(insertProduct);
+    res.status(200).send("Product inserted");
   } catch (err) {
     res.status(500).send("Unexpected error");
     console.log(err);
@@ -62,4 +89,5 @@ module.exports = {
   getProduct,
   updateProduct,
   deleteProduct,
+  addProduct,
 };

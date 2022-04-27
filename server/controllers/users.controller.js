@@ -86,6 +86,45 @@ const updateUserInfo = async (req, res) => {
     console.log(err);
   }
 };
+const getUsers = async (req, res) => {
+  if (req.role === 0) {
+    return res.status(200).send("Not admin");
+  }
+  try {
+    const userQuery = await pool.query(
+      "SELECT id, username, email, address, telephone, role, date_joined, subscription, first_name, last_name, city, state, zipcode, country FROM USERS"
+    );
+    return res.status(200).json(userQuery.rows);
+  } catch (err) {
+    res.status(500).send("Unexpected error");
+  }
+};
+const updateSubscription = async (req, res) => {
+  if (req.role === 0) {
+    return res.status(200).send("Not admin");
+  }
+  const id = req.body.id;
+  const days = req.body.days;
+  try {
+    await userServices.manageSubscription(id, days);
+    return res.status(200).json("Subscription updated");
+  } catch (err) {
+    res.status(500).send("Unexpected error");
+  }
+};
+const updateRole = async (req, res) => {
+  if (req.role === 0) {
+    return res.status(200).send("Not admin");
+  }
+  const id = req.body.id;
+  const role = req.body.role;
+  try {
+    await pool.query("UPDATE users SET role=$1 WHERE id=$2", [role, id]);
+    return res.status(200).json("Role updated");
+  } catch (err) {
+    res.status(500).send("Unexpected error");
+  }
+};
 module.exports = {
   login,
   register,
@@ -93,4 +132,7 @@ module.exports = {
   getUser,
   getUserInfo,
   updateUserInfo,
+  getUsers,
+  updateSubscription,
+  updateRole,
 };

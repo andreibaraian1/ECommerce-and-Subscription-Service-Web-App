@@ -13,7 +13,9 @@ import { useDispatch } from "react-redux";
 import { setUser } from "../../actions";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import AdminProducts from "./AdminProducts";
+import AdminProducts from "./Products/AdminProducts";
+import AdminOrders from "./Orders/AdminOrders";
+import AdminUsers from "./Users/AdminUsers";
 
 const AdminPanel = () => {
   const drawerWidth = 240;
@@ -60,6 +62,7 @@ const AdminPanel = () => {
         <List>
           <ListItem
             button
+            disabled={nav==='Products'}
             onClick={() => {
               setNav("Products");
             }}
@@ -68,6 +71,7 @@ const AdminPanel = () => {
           </ListItem>
           <ListItem
             button
+            disabled={nav==='Orders'}
             onClick={() => {
               setNav("Orders");
             }}
@@ -76,11 +80,22 @@ const AdminPanel = () => {
           </ListItem>
           <ListItem
             button
+            disabled={nav==='Users'}
             onClick={() => {
               setNav("Users");
             }}
           >
             Users
+          </ListItem>
+          <Divider />
+          <ListItem
+            button
+            onClick={()=>{
+              navigate('/shop');
+            }
+            }
+          >
+            Go back to shop
           </ListItem>
         </List>
       </Drawer>
@@ -89,9 +104,10 @@ const AdminPanel = () => {
         sx={{ flexGrow: 1, bgcolor: "background.default", p: 3 }}
       >
         {nav === "Products" && <AdminProducts />}
-        {/* {nav==='Orders' && <AdminOrders />}
-          {nav==='Users' && <AdminUsers />} */}
+        {nav==='Orders' && <AdminOrders />}
+        {nav==='Users' && <AdminUsers />}
       </Box>
+
     </Box>
   );
 };

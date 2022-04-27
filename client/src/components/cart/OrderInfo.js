@@ -26,7 +26,7 @@ const OrderInfo = (props) => {
   const [message, setMessage] = useState("");
   const [paymentMethod, setPaymentMethod] = useState("Card");
   const sendOrder = async () => {
-    if (!firstName || !lastName || !city || !zip || !country || !region) {
+    if (!firstName || !lastName || !city || !zip || !country || !region || !shippingAddress) {
       setMessage("All values required");
       return;
     }
@@ -36,6 +36,7 @@ const OrderInfo = (props) => {
       city,
       zip,
       country,
+      shippingAddress,
       region,
     };
     const result = await Axios.post(

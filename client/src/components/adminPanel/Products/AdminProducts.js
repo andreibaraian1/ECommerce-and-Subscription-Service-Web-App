@@ -2,10 +2,18 @@ import { useEffect, useState } from "react";
 import Axios from "axios";
 import { Table } from "react-bootstrap";
 import { Input, Button } from "@mui/material";
+import toast, { Toaster } from "react-hot-toast";
+import AddProduct from "./AddProduct";
+
 const AdminProducts = () => {
   const [products, setProducts] = useState([]);
-  const [update, setUpdate] = useState(false);
+  const [form, setForm] = useState(false);
+
   useEffect(() => {
+    fetchProducts();
+  }, []);
+
+  const fetchProducts = () => {
     Axios.get("http://localhost:3001/products/getProducts")
       .then((response) => {
         const result = response.data.sort((a, b) => a.id - b.id);
@@ -14,7 +22,7 @@ const AdminProducts = () => {
       .catch((err) => {
         console.log(err);
       });
-  }, [update]);
+  };
   const handleChange = (property, value, index) => {
     let items = [...products];
     let item = {
@@ -33,21 +41,35 @@ const AdminProducts = () => {
         withCredentials: true,
       }
     );
-    setUpdate((prev) => !prev);
-   
+    toast.success(` ${product.name} was updated`, {
+      duration: 1500,
+      position: "top-right",
+    });
+
+    fetchProducts();
   };
   const handleDelete = async (index) => {
-    await Axios.get(
-      `http://localhost:3001/products/deleteProduct/${index}`,
-      {
-        withCredentials: true,
-      }
-    );
-    setUpdate((prev) => !prev);
-   
+    await Axios.get(`http://localhost:3001/products/deleteProduct/${index}`, {
+      withCredentials: true,
+    });
+    toast.success(`Product deleted`, {
+      duration: 1500,
+      position: "top-right",
+    });
+    fetchProducts();
   };
   return (
     <>
+      <Toaster />
+
+      {form && <AddProduct fetchProducts={fetchProducts} closeForm={()=>setForm(false)}/>}
+      <Button
+        onClick={() => {
+          setForm((prev)=>!prev);
+        }}
+      >
+        {form ? "Cancel" : "Add Product"}
+      </Button>
       <Table striped bordered hover>
         <thead>
           <tr>
