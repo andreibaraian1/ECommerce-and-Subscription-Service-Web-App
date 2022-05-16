@@ -15,24 +15,20 @@ const Home = () => {
         className={styles.main}
         style={{ backgroundImage: `url(${background})` }}
       >
-        <div></div>
-        <div className={styles.header}>
-          <div>
-            <h1>POWER GYM</h1>
-            <Button
-              style={{ width: 500, height: 70 }}
-              size="large"
-              variant="contained"
-              color="success"
-              onClick={() => {
-                navigate("/shop");
-              }}
-            >
-              Shop now
-            </Button>
-          </div>
+        <div className={styles.content}>
+          <h1>POWER GYM</h1>
+          <Button
+            style={{ width: 500, height: 70 }}
+            size="large"
+            variant="contained"
+            color="success"
+            onClick={() => {
+              navigate("/shop");
+            }}
+          >
+            Shop now
+          </Button>
         </div>
-        <div></div>
       </div>
     </>
   );

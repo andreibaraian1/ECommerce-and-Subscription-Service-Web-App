@@ -20,9 +20,6 @@ const Navbar = () => {
             <Link className={styles.navbarLink} to="/shop">
               Shop
             </Link>
-            <Link className={styles.navbarLink} to="/about">
-              About
-            </Link>
           </Nav>
 
           {!user && (

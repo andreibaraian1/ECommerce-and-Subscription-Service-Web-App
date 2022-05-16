@@ -3,13 +3,28 @@
   background-position: center;
   background-size: cover;
 }
-.header {
-    position: absolute; 
-    top: 50%;
-    right:10%;
+.content {
+  position: absolute;
+  top: 50%;
+  right: 10%;
 }
-.header h1 {
+.content h1 {
   color: rgb(255, 255, 255);
   font-size: 7em;
-  text-shadow: -1px 0 rgb(0, 0, 0), 0 1px rgb(0, 0, 0), 1px 0 rgb(0, 0, 0), 0 -1px rgb(0, 0, 0);
+  text-shadow: -1px 0 rgb(0, 0, 0), 0 1px rgb(0, 0, 0), 1px 0 rgb(0, 0, 0),
+    0 -1px rgb(0, 0, 0);
+}
+@media (max-width: 550px) {
+  .content {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    justify-items: center;
+    width: 100%;
+    flex: 1;
+    
+  }
+  .content h1 {
+   font-size:2em;
+  }
 }
