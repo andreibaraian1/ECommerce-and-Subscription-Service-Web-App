@@ -10,6 +10,12 @@ router.get("/getUser", checkAuth, userController.getUser);
 router.get("/getUserInfo", checkAuth, userController.getUserInfo);
 router.post("/updateUserInfo", checkAuth, userController.updateUserInfo);
 router.get("/getUsers", checkAuth, userController.getUsers);
-router.post("/updateSubscription",checkAuth,userController.updateSubscription)
-router.post("/updateRole",checkAuth,userController.updateRole)
+router.post(
+  "/updateSubscription",
+  checkAuth,
+  userController.updateSubscription
+);
+router.post("/updateRole", checkAuth, userController.updateRole);
+router.get("/getQRToken", checkAuth, userController.generateQrCode);
+router.post("/checkQRToken", checkAuth, userController.checkQrCode);
 module.exports = router;

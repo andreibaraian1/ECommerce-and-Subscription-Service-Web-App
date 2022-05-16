@@ -16,6 +16,7 @@ import { useState } from "react";
 import AdminProducts from "./Products/AdminProducts";
 import AdminOrders from "./Orders/AdminOrders";
 import AdminUsers from "./Users/AdminUsers";
+import QRCheck from "./QR/QRCheck";
 
 const AdminPanel = () => {
   const drawerWidth = 240;
@@ -62,7 +63,7 @@ const AdminPanel = () => {
         <List>
           <ListItem
             button
-            disabled={nav==='Products'}
+            disabled={nav === "Products"}
             onClick={() => {
               setNav("Products");
             }}
@@ -71,7 +72,7 @@ const AdminPanel = () => {
           </ListItem>
           <ListItem
             button
-            disabled={nav==='Orders'}
+            disabled={nav === "Orders"}
             onClick={() => {
               setNav("Orders");
             }}
@@ -80,7 +81,7 @@ const AdminPanel = () => {
           </ListItem>
           <ListItem
             button
-            disabled={nav==='Users'}
+            disabled={nav === "Users"}
             onClick={() => {
               setNav("Users");
             }}
@@ -90,10 +91,19 @@ const AdminPanel = () => {
           <Divider />
           <ListItem
             button
-            onClick={()=>{
-              navigate('/shop');
-            }
-            }
+            disabled={nav === "QR"}
+            onClick={() => {
+              setNav("QR");
+            }}
+          >
+            Go to QR Checker
+          </ListItem>
+          <Divider />
+          <ListItem
+            button
+            onClick={() => {
+              navigate("/shop");
+            }}
           >
             Go back to shop
           </ListItem>
@@ -104,10 +114,10 @@ const AdminPanel = () => {
         sx={{ flexGrow: 1, bgcolor: "background.default", p: 3 }}
       >
         {nav === "Products" && <AdminProducts />}
-        {nav==='Orders' && <AdminOrders />}
-        {nav==='Users' && <AdminUsers />}
+        {nav === "Orders" && <AdminOrders />}
+        {nav === "Users" && <AdminUsers />}
+        {nav === "QR" && <QRCheck />}
       </Box>
-
     </Box>
   );
 };

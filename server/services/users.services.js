@@ -80,6 +80,26 @@ const generateAccessToken = (user) => {
     { expiresIn: "24h" }
   );
 };
+const genereateQrCode = (id) => {
+  return jwt.sign(
+    {
+      id,
+    },
+    process.env.TOKEN_SECRET,
+    { expiresIn: "1h" }
+  );
+};
+const checkQrCode = (token) => {
+  if (!token) {
+    return false;
+  }
+  try {
+    const data = jwt.verify(token, process.env.TOKEN_SECRET);
+    return data.id;
+  } catch {
+    return false;
+  }
+};
 const manageSubscription = async (userId, time) => {
   const userQuery = await pool.query("SELECT * FROM USERS WHERE id=$1", [
     userId,
@@ -103,4 +123,6 @@ module.exports = {
   register,
   generateAccessToken,
   manageSubscription,
+  genereateQrCode,
+  checkQrCode
 };

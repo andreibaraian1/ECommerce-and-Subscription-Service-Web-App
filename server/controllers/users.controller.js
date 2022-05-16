@@ -8,7 +8,12 @@ const login = async (req, res) => {
     if (result?.error) {
       res.status(result.status).json({ error: result.error });
     } else {
-      res.cookie("token", result.token, { maxage: 86400, httpOnly: true });
+      res.cookie("token", result.token, {
+        maxage: 86400,
+        httpOnly: true,
+        sameSite: "none",
+        secure: true,
+      });
       res.status(result.status).json({ message: result.message });
     }
   } catch (err) {
@@ -125,6 +130,34 @@ const updateRole = async (req, res) => {
     res.status(500).send("Unexpected error");
   }
 };
+const generateQrCode = async (req, res) => {
+  const token = userServices.genereateQrCode(req.userId);
+  return res.status(200).send(token);
+};
+const checkQrCode = async (req, res) => {
+  const userId = userServices.checkQrCode(req.body.token);
+  if (!userId) {
+    return res.status(200).send("No user found");
+  }
+  const { rows } = await pool.query(
+    "SELECT subscription FROM USERS WHERE id=$1",
+    [userId]
+  );
+  const subscription = new Date(rows[0].subscription);
+  const today = new Date();
+  if (subscription > today) {
+    res.status(200).json({
+      message: `Subscription valid until ${subscription.toString()}`,
+      valid: true,
+    });
+  } else {
+    res.status(200).json({
+      message: `Subscription not valid, expired at ${subscription.toString()}`,
+      valid: false,
+    });
+  }
+};
+
 module.exports = {
   login,
   register,
@@ -135,4 +168,6 @@ module.exports = {
   getUsers,
   updateSubscription,
   updateRole,
+  generateQrCode,
+  checkQrCode,
 };

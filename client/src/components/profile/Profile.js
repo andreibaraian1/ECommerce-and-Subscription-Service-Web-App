@@ -5,13 +5,16 @@ import { useNavigate } from "react-router-dom";
 import { setModal, setModalMessage } from "../../actions";
 import { TextField, Typography, Button } from "@mui/material";
 import { Container, Row, Col } from "react-bootstrap";
+import QRCode from "react-qr-code";
 import styles from "./Profile.module.css";
+
 const Profile = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [user, setUser] = useState({});
   const [subscription, setSubscription] = useState(false);
-  const [subscriptionDate,setSubscriptionDate] = useState('');
+  const [subscriptionDate, setSubscriptionDate] = useState("");
+  const [QR, setQR] = useState(null);
   //form states
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -37,7 +40,7 @@ const Profile = () => {
         const subscriptionDate = new Date(res.data.subscription);
         if (subscriptionDate > today) {
           setSubscription(true);
-          setSubscriptionDate(subscriptionDate.toLocaleDateString('en-GB'))
+          setSubscriptionDate(subscriptionDate.toLocaleDateString("en-GB"));
         }
       }
     });
@@ -71,6 +74,12 @@ const Profile = () => {
     );
     console.log(updateUser);
   };
+  const handleQR = async () => {
+    const getQR = await Axios.get("http://localhost:3001/users/getQRToken", {
+      withCredentials: true,
+    });
+    setQR(getQR.data);
+  };
   return (
     <Container>
       <Row>
@@ -81,6 +90,8 @@ const Profile = () => {
               <div>
                 <p>Subscription active</p>
                 <p>Expires in {subscriptionDate}</p>
+                {!QR && <Button onClick={handleQR}>Get QR Code</Button>}
+                {QR && <QRCode value={QR} />}
               </div>
             ) : (
               <div>No subscription active</div>
