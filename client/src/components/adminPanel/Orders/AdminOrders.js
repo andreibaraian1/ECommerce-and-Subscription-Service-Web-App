@@ -13,10 +13,18 @@ const AdminOrders = () => {
       withCredentials: true,
     })
       .then((response) => {
-        let result = response.data.filter(
-          (item) => item.status !== "Canceled"
-        );
-        result.sort((a, b) => a.shipping_status.localeCompare(b.shipping_status))
+        let result = response.data.filter((item) => item.status !== "Canceled");
+        console.log(result);
+        // result.sort((a, b) => {
+        //   // a.shipping_status.localeCompare(b.shipping_status, "en-us")
+        //   if (a > b) {
+        //     return -1;
+        //   }
+        //   if (b > a) {
+        //     return 1;
+        //   }
+        //   return 0;
+        // });
         setOrders(result);
       })
       .catch((err) => {
