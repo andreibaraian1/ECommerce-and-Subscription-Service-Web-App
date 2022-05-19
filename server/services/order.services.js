@@ -150,47 +150,51 @@ const editOrderStatus = async (status, paymentInt) => {
   ]);
 };
 const checkStripePayments = async () => {
-  const paymentIntents = await stripe.paymentIntents.list();
-  const intents = paymentIntents.data;
-  const orders = await getOrders();
-  let canceledOrders = [];
-  let completedOrders = [];
-  for (const paymentIntent of intents) {
-    const canceledOrder = orders.find(
-      (order) =>
-        order.status === "Processing" &&
-        order.payment_int === paymentIntent.id &&
-        paymentIntent.status === "canceled"
-    ); // find cancelled intents in orders
+  try {
+    const paymentIntents = await stripe.paymentIntents.list();
+    const intents = paymentIntents.data;
+    const orders = await getOrders();
+    let canceledOrders = [];
+    let completedOrders = [];
+    for (const paymentIntent of intents) {
+      const canceledOrder = orders.find(
+        (order) =>
+          order.status === "Processing" &&
+          order.payment_int === paymentIntent.id &&
+          paymentIntent.status === "canceled"
+      ); // find cancelled intents in orders
 
-    const completedOrder = orders.find(
-      (order) =>
-        order.status === "Processing" &&
-        order.payment_int === paymentIntent.id &&
-        paymentIntent.status === "succeeded"
-    );
+      const completedOrder = orders.find(
+        (order) =>
+          order.status === "Processing" &&
+          order.payment_int === paymentIntent.id &&
+          paymentIntent.status === "succeeded"
+      );
 
-    if (canceledOrder) {
-      canceledOrders = [...canceledOrders, canceledOrder];
-    }
-    if (completedOrder) {
-      completedOrders = [...completedOrders, completedOrder];
-    }
-  }
-  for (const canceledOrder of canceledOrders) {
-    await editOrderStatus("Canceled", canceledOrder.payment_int);
-  }
-  for (const completedOrder of completedOrders) {
-    await editOrderStatus("Completed", completedOrder.payment_int);
-    const products = completedOrder.products;
-    const userId = completedOrder.id_user;
-    for (const product of products) {
-      if (product.category === "subscription") {
-        manageSubscription(userId, product.details);
+      if (canceledOrder) {
+        canceledOrders = [...canceledOrders, canceledOrder];
+      }
+      if (completedOrder) {
+        completedOrders = [...completedOrders, completedOrder];
       }
     }
+    for (const canceledOrder of canceledOrders) {
+      await editOrderStatus("Canceled", canceledOrder.payment_int);
+    }
+    for (const completedOrder of completedOrders) {
+      await editOrderStatus("Completed", completedOrder.payment_int);
+      const products = completedOrder.products;
+      const userId = completedOrder.id_user;
+      for (const product of products) {
+        if (product.category === "subscription") {
+          manageSubscription(userId, product.details);
+        }
+      }
+    }
+    console.log("Check stripe intents finished");
+  } catch (err) {
+    console.log(err);
   }
-  console.log("Check stripe intents finished");
 };
 
 module.exports = {

@@ -17,7 +17,6 @@ import Fetch from "./api/Fetch";
 import Orders from "./components/orders/Orders";
 import styles from "./App.module.css";
 import Home from "./components/home/Home";
-import About from "./components/home/About";
 import Profile from "./components/profile/Profile";
 import AdminPanel from "./components/adminPanel/AdminPanel";
 
@@ -33,7 +32,6 @@ function App() {
         {modal && <ModalLayout message={modalMessage} />}
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="about" element={<About />} />
           <Route path="shop" element={<Products />} />
           <Route path="shop/filter/:category" element={<Products />} />
           <Route path="products/:id" element={<ProductDetail />} />

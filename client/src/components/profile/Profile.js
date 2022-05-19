@@ -6,7 +6,6 @@ import { setModal, setModalMessage } from "../../actions";
 import { TextField, Typography, Button } from "@mui/material";
 import { Container, Row, Col } from "react-bootstrap";
 import QRCode from "react-qr-code";
-import styles from "./Profile.module.css";
 
 const Profile = () => {
   const dispatch = useDispatch();
@@ -15,6 +14,7 @@ const Profile = () => {
   const [subscription, setSubscription] = useState(false);
   const [subscriptionDate, setSubscriptionDate] = useState("");
   const [QR, setQR] = useState(null);
+  const [visible, setVisible] = useState(false);
   //form states
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -98,98 +98,109 @@ const Profile = () => {
             )}
           </Typography>
         </Col>
-        <Col>
-          <Typography>Username</Typography>
-          <TextField
-            style={{ width: "200px", margin: "5px" }}
-            type="text"
-            variant="outlined"
-            value={user.username}
-          />
-          <Typography>First Name</Typography>
-          <TextField
-            style={{ width: "200px", margin: "5px" }}
-            type="text"
-            variant="outlined"
-            value={firstName}
-            onChange={(e) => setFirstName(e.target.value)}
-          />
-          <Typography>Last Name</Typography>
-          <TextField
-            style={{ width: "200px", margin: "5px" }}
-            type="text"
-            label="Last Name"
-            variant="outlined"
-            value={lastName}
-            onChange={(e) => setLastName(e.target.value)}
-          />
-          <Typography>Telephone</Typography>
-          <TextField
-            style={{ width: "200px", margin: "5px" }}
-            type="text"
-            label="Telephone"
-            variant="outlined"
-            value={telephone}
-            onChange={(e) => setTelephone(e.target.value)}
-          />
-          <Typography>email</Typography>
-          <TextField
-            style={{ width: "200px", margin: "5px" }}
-            type="text"
-            variant="outlined"
-            value={user.email}
-          />
-        </Col>
-        <Col>
-          <Typography>Address</Typography>
-          <TextField
-            style={{ width: "200px", margin: "5px" }}
-            type="text"
-            label="Address"
-            variant="outlined"
-            value={address}
-            onChange={(e) => setAddress(e.target.value)}
-          />
-          <Typography>City</Typography>
-          <TextField
-            style={{ width: "200px", margin: "5px" }}
-            type="text"
-            label="City"
-            variant="outlined"
-            value={city}
-            onChange={(e) => setCity(e.target.value)}
-          />
-          <Typography>State</Typography>
-          <TextField
-            style={{ width: "200px", margin: "5px" }}
-            type="text"
-            label="State"
-            variant="outlined"
-            value={state}
-            onChange={(e) => setState(e.target.value)}
-          />
-          <Typography>Zipcode</Typography>
-          <TextField
-            style={{ width: "200px", margin: "5px" }}
-            type="text"
-            label="Zipcode"
-            variant="outlined"
-            value={zipcode}
-            onChange={(e) => setZipcode(e.target.value)}
-          />
-          <Typography>Country</Typography>
-          <TextField
-            style={{ width: "200px", margin: "5px" }}
-            type="text"
-            label="Country"
-            variant="outlined"
-            value={country}
-            onChange={(e) => setCountry(e.target.value)}
-          />
-          <Button variant="contained" color="primary" onClick={handleSubmit}>
-            Save User data
-          </Button>
-        </Col>
+        <Button onClick={() => setVisible((prev) => !prev)}>
+          {visible ? "Hide personal information" : "Change personal information"}
+        </Button>
+        {visible && (
+          <>
+            <Col>
+              <Typography>Username</Typography>
+              <TextField
+                style={{ width: "200px", margin: "5px" }}
+                type="text"
+                variant="outlined"
+                value={user.username}
+              />
+              <Typography>First Name</Typography>
+              <TextField
+                style={{ width: "200px", margin: "5px" }}
+                type="text"
+                variant="outlined"
+                value={firstName}
+                onChange={(e) => setFirstName(e.target.value)}
+              />
+              <Typography>Last Name</Typography>
+              <TextField
+                style={{ width: "200px", margin: "5px" }}
+                type="text"
+                label="Last Name"
+                variant="outlined"
+                value={lastName}
+                onChange={(e) => setLastName(e.target.value)}
+              />
+              <Typography>Telephone</Typography>
+              <TextField
+                style={{ width: "200px", margin: "5px" }}
+                type="text"
+                label="Telephone"
+                variant="outlined"
+                value={telephone}
+                onChange={(e) => setTelephone(e.target.value)}
+              />
+              <Typography>email</Typography>
+              <TextField
+                style={{ width: "200px", margin: "5px" }}
+                type="text"
+                variant="outlined"
+                value={user.email}
+              />
+            </Col>
+            <Col>
+              <Typography>Address</Typography>
+              <TextField
+                style={{ width: "200px", margin: "5px" }}
+                type="text"
+                label="Address"
+                variant="outlined"
+                value={address}
+                onChange={(e) => setAddress(e.target.value)}
+              />
+              <Typography>City</Typography>
+              <TextField
+                style={{ width: "200px", margin: "5px" }}
+                type="text"
+                label="City"
+                variant="outlined"
+                value={city}
+                onChange={(e) => setCity(e.target.value)}
+              />
+              <Typography>State</Typography>
+              <TextField
+                style={{ width: "200px", margin: "5px" }}
+                type="text"
+                label="State"
+                variant="outlined"
+                value={state}
+                onChange={(e) => setState(e.target.value)}
+              />
+              <Typography>Zipcode</Typography>
+              <TextField
+                style={{ width: "200px", margin: "5px" }}
+                type="text"
+                label="Zipcode"
+                variant="outlined"
+                value={zipcode}
+                onChange={(e) => setZipcode(e.target.value)}
+              />
+              <Typography>Country</Typography>
+              <TextField
+                style={{ width: "200px", margin: "5px" }}
+                type="text"
+                label="Country"
+                variant="outlined"
+                value={country}
+                onChange={(e) => setCountry(e.target.value)}
+              />
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={handleSubmit}
+              >
+                Save User data
+              </Button>
+            </Col>
+          </>
+        )}
       </Row>
     </Container>
   );
