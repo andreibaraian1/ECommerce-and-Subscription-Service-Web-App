@@ -157,6 +157,38 @@ const checkQrCode = async (req, res) => {
     });
   }
 };
+const getClosingTime = async (req, res) => {
+  try {
+    const { rows } = await pool.query("SELECT closing_hours FROM SCHEDULE");
+    const closingTime = rows[0].closing_hours;
+    const [closingHours, closingMinutes, closingSeconds] =
+      closingTime.split(`:`);
+    const closeDate = new Date();
+    closeDate.setHours(closingHours, closingMinutes, closingSeconds);
+    const now = new Date();
+    let minutesUntilClose = (closeDate - now) / 1000 / 60;
+
+    let hours = 0;
+    let minutes = 0;
+    while (minutesUntilClose !== 0) {
+      if (minutesUntilClose > 60) {
+        hours += 1;
+        minutesUntilClose -= 60;
+      } else {
+        minutes += minutesUntilClose;
+        minutesUntilClose -= minutes;
+      }
+    }
+    let closed = false;
+    minutes = Math.floor(minutes);
+    if (hours == 0 && minutes <= 0) {
+      closed = true;
+    }
+    return res.status(200).json({ closed, hours, minutes });
+  } catch (err) {
+    console.log(err);
+  }
+};
 
 module.exports = {
   login,
@@ -170,4 +202,5 @@ module.exports = {
   updateRole,
   generateQrCode,
   checkQrCode,
+  getClosingTime,
 };
