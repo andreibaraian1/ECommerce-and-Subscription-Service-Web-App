@@ -189,7 +189,35 @@ const getClosingTime = async (req, res) => {
     console.log(err);
   }
 };
-
+const getTime = async (req, res) => {
+  try {
+    const { rows } = await pool.query("SELECT closing_hours FROM SCHEDULE");
+    const closingTime = rows[0].closing_hours;
+    const [closingHours, closingMinutes, closingSeconds] =
+      closingTime.split(`:`);
+    return res.status(200).json({ closingHours, closingMinutes });
+  } catch (err) {
+    console.log(err);
+  }
+};
+const setTime = async (req, res) => {
+  try {
+    if (req.role != 1)
+      return res.status(200).json({ success: false, message: "Not admin" });
+    const time = req.body.time;
+    const [hours, minutes] = time.split(":");
+    const updatedTime = `${hours}:${minutes}:00`;
+    const updateInfo = await pool.query(
+      "UPDATE schedule SET closing_hours=$1",
+      [updatedTime]
+    );
+    return res
+      .status(200)
+      .json({ success: true, message: "Update successful" });
+  } catch (err) {
+    console.log(err);
+  }
+};
 module.exports = {
   login,
   register,
@@ -203,4 +231,6 @@ module.exports = {
   generateQrCode,
   checkQrCode,
   getClosingTime,
+  getTime,
+  setTime,
 };

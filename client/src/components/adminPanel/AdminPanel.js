@@ -17,12 +17,15 @@ import AdminProducts from "./Products/AdminProducts";
 import AdminOrders from "./Orders/AdminOrders";
 import AdminUsers from "./Users/AdminUsers";
 import QRCheck from "./QR/QRCheck";
+import { Button } from "@mui/material";
+import toast, { Toaster } from "react-hot-toast";
 
 const AdminPanel = () => {
   const drawerWidth = 240;
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [nav, setNav] = useState("");
+  const [time, setTime] = useState(`00:00`);
   useEffect(() => {
     Axios.get("http://localhost:3001/users/getUser", {
       withCredentials: true,
@@ -32,93 +35,130 @@ const AdminPanel = () => {
         navigate("/shop");
       }
     });
-  });
+  }, [dispatch, navigate]);
+  const getTime = async () => {
+    const res = await Axios.get("http://localhost:3001/users/getTime");
+    const hours = res.data.closingHours;
+    const minutes = res.data.closingMinutes;
+    console.log(hours, minutes);
+    setTime(`${hours}:${minutes}`);
+  };
+  useEffect(() => {
+    getTime();
+  }, []);
+  const onTimeChange = (event) => {
+    setTime(event.target.value);
+  };
+  const submitTime = async () => {
+    const res = await Axios.post(
+      "http://localhost:3001/users/setTime",
+      { time },
+      {
+        withCredentials: true,
+      }
+    );
+    if (res.data?.success) {
+      getTime();
+      toast.success(` Closing time was updated`, {
+        duration: 1500,
+        position: "top-right",
+      });
+    }
+  };
   return (
-    <Box sx={{ display: "flex" }}>
-      <CssBaseline />
-      <AppBar
-        position="fixed"
-        sx={{ width: `calc(100% - ${drawerWidth}px)`, ml: `${drawerWidth}px` }}
-      >
-        <Toolbar>
-          <Typography variant="h6" noWrap component="div">
-            Dashboard
-          </Typography>
-        </Toolbar>
-      </AppBar>
-      <Drawer
-        sx={{
-          width: drawerWidth,
-          flexShrink: 0,
-          "& .MuiDrawer-paper": {
+    <>
+      <Toaster />
+      <Box sx={{ display: "flex" }}>
+        <CssBaseline />
+        <AppBar
+          position="fixed"
+          sx={{
+            width: `calc(100% - ${drawerWidth}px)`,
+            ml: `${drawerWidth}px`,
+          }}
+        >
+          <Toolbar>
+            <Typography variant="h6" noWrap component="div">
+              Dashboard
+            </Typography>
+          </Toolbar>
+        </AppBar>
+        <Drawer
+          sx={{
             width: drawerWidth,
-            boxSizing: "border-box",
-          },
-        }}
-        variant="permanent"
-        anchor="left"
-      >
-        <Toolbar />
-        <Divider />
-        <List>
-          <ListItem
-            button
-            disabled={nav === "Products"}
-            onClick={() => {
-              setNav("Products");
-            }}
-          >
-            Products
-          </ListItem>
-          <ListItem
-            button
-            disabled={nav === "Orders"}
-            onClick={() => {
-              setNav("Orders");
-            }}
-          >
-            Orders
-          </ListItem>
-          <ListItem
-            button
-            disabled={nav === "Users"}
-            onClick={() => {
-              setNav("Users");
-            }}
-          >
-            Users
-          </ListItem>
+            flexShrink: 0,
+            "& .MuiDrawer-paper": {
+              width: drawerWidth,
+              boxSizing: "border-box",
+            },
+          }}
+          variant="permanent"
+          anchor="left"
+        >
+          <Toolbar />
+          <input type="time" value={time} onChange={onTimeChange}></input>
+          <Button onClick={submitTime}>Set new time</Button>
           <Divider />
-          <ListItem
-            button
-            disabled={nav === "QR"}
-            onClick={() => {
-              setNav("QR");
-            }}
-          >
-            Go to QR Checker
-          </ListItem>
-          <Divider />
-          <ListItem
-            button
-            onClick={() => {
-              navigate("/shop");
-            }}
-          >
-            Go back to shop
-          </ListItem>
-        </List>
-      </Drawer>
-      <Box
-        component="main"
-        sx={{ flexGrow: 1, bgcolor: "background.default", p: 3 }}
-      >
-        {nav === "Products" && <AdminProducts />}
-        {nav === "Orders" && <AdminOrders />}
-        {nav === "Users" && <AdminUsers />}
-        {nav === "QR" && <QRCheck />}
+          <List>
+            <ListItem
+              button
+              disabled={nav === "Products"}
+              onClick={() => {
+                setNav("Products");
+              }}
+            >
+              Products
+            </ListItem>
+            <ListItem
+              button
+              disabled={nav === "Orders"}
+              onClick={() => {
+                setNav("Orders");
+              }}
+            >
+              Orders
+            </ListItem>
+            <ListItem
+              button
+              disabled={nav === "Users"}
+              onClick={() => {
+                setNav("Users");
+              }}
+            >
+              Users
+            </ListItem>
+            <Divider />
+            <ListItem
+              button
+              disabled={nav === "QR"}
+              onClick={() => {
+                setNav("QR");
+              }}
+            >
+              Go to QR Checker
+            </ListItem>
+            <Divider />
+            <ListItem
+              button
+              onClick={() => {
+                navigate("/shop");
+              }}
+            >
+              Go back to shop
+            </ListItem>
+          </List>
+        </Drawer>
+        <Box
+          component="main"
+          sx={{ flexGrow: 1, bgcolor: "background.default", p: 3 }}
+        >
+          {nav === "Products" && <AdminProducts />}
+          {nav === "Orders" && <AdminOrders />}
+          {nav === "Users" && <AdminUsers />}
+          {nav === "QR" && <QRCheck />}
+        </Box>
       </Box>
-    </Box>
+    </>
   );
 };
 export default AdminPanel;

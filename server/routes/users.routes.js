@@ -19,5 +19,7 @@ router.post("/updateRole", checkAuth, userController.updateRole);
 router.get("/getQRToken", checkAuth, userController.generateQrCode);
 router.post("/checkQRToken", checkAuth, userController.checkQrCode);
 router.get("/getClosingTime", userController.getClosingTime);
+router.get("/getTime", userController.getTime);
+router.post("/setTime", checkAuth, userController.setTime);
 
 module.exports = router;
