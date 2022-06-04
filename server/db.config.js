@@ -11,6 +11,9 @@ if (connectionString) {
     host: process.env.HOST,
     port: process.env.DATABASE_PORT,
     database: process.env.DATABASE,
+    ssl: {
+      rejectUnauthorized: false,
+    },
   });
 }
 
