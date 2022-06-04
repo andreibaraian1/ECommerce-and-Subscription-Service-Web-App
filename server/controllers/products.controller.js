@@ -39,6 +39,7 @@ const updateProduct = async (req, res) => {
     res.status(200).send("Product updated");
   } catch (err) {
     res.status(500).send("Unexpected error");
+    console.log(err);
   }
 };
 const deleteProduct = async (req, res) => {

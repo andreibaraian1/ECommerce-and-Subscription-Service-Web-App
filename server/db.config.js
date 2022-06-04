@@ -7,5 +7,5 @@ const pool = new Pool({
   port: process.env.DATABASE_PORT,
   database: process.env.DATABASE,
 });
-
+console.log(pool);
 module.exports = pool;
