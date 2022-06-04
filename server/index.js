@@ -35,6 +35,7 @@ app.use("/cart", cartRouter);
 app.use("/order", orderRouter);
 app.use("/", stripeRouter);
 
-app.listen(3001, () => {
+
+app.listen(process.env.PORT, () => {
   console.log("Server started");
 });
