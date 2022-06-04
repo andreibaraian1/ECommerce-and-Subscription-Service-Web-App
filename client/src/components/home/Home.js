@@ -13,7 +13,7 @@ const Home = () => {
   useEffect(() => {
     document.body.style.overflow = "hidden";
     const getTime = async () => {
-      const res = await Axios.get("http://localhost:3001/users/getClosingTime");
+      const res = await Axios.get(`${process.env.REACT_APP_HOSTNAME}/users/getClosingTime`);
       if (!res.data.closed) {
         setHoursUntilClose(res.data.hours);
         setMinutesUntilClose(res.data.minutes);
@@ -21,6 +21,7 @@ const Home = () => {
       }
     };
     getTime();
+    console.log(process.env.REACT_APP_HOSTNAME)
   }, []);
   return (
     <>

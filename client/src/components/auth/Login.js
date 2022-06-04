@@ -25,7 +25,7 @@ const Login = () => {
   const [usernameLog, setUsernameLog] = useState("");
   const [passwordLog, setPasswordLog] = useState("");
   const [error, setError] = useState(false);
-  const [errorMessage,setErrorMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState("");
   const handleSubmit = async (event) => {
     event?.preventDefault();
     if (usernameLog.trim().length === 0 || passwordLog.trim().length === 0) {
@@ -33,7 +33,7 @@ const Login = () => {
       return;
     }
     const login = await Axios.post(
-      "http://localhost:3001/users/login",
+      `${process.env.REACT_APP_HOSTNAME}/users/login`,
       {
         username: usernameLog,
         password: passwordLog,
@@ -48,7 +48,7 @@ const Login = () => {
     }
     setUsernameLog("");
     setPasswordLog("");
-    Axios.get("http://localhost:3001/users/getUser", {
+    Axios.get(`${process.env.REACT_APP_HOSTNAME}/users/getUser`, {
       withCredentials: true,
     }).then((res) => {
       dispatch(setUser(res.data.user));
@@ -90,7 +90,11 @@ const Login = () => {
             <Typography component="h1" variant="h5">
               Sign in
             </Typography>
-            {errorMessage && <Typography component="caption" variant="h6" color='error'>{errorMessage}</Typography>}
+            {errorMessage && (
+              <Typography component="caption" variant="h6" color="error">
+                {errorMessage}
+              </Typography>
+            )}
             <Box
               component="form"
               noValidate
@@ -111,7 +115,7 @@ const Login = () => {
                 onChange={(e) => {
                   setUsernameLog(e.target.value);
                   setError(false);
-                  setErrorMessage('');
+                  setErrorMessage("");
                 }}
               />
               <TextField
@@ -128,7 +132,7 @@ const Login = () => {
                 onChange={(e) => {
                   setPasswordLog(e.target.value);
                   setError(false);
-                  setErrorMessage('');
+                  setErrorMessage("");
                 }}
               />
 

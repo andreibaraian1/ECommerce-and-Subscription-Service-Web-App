@@ -1,6 +1,6 @@
 import { useState } from "react";
 import Axios from "axios";
-import styles from './Login.module.css';
+import styles from "./Login.module.css";
 const Register = (props) => {
   const [usernameReg, setUsernameReg] = useState("");
   const [passwordReg, setPasswordReg] = useState("");
@@ -16,12 +16,15 @@ const Register = (props) => {
       setRegisterstatus("Inputs cannot be empty");
       return;
     }
-    const register = await Axios.post("http://localhost:3001/users/register", {
-      username: usernameReg,
-      password: passwordReg,
-      email: emailReg,
-    });
-    
+    const register = await Axios.post(
+      `${process.env.REACT_APP_HOSTNAME}/users/register`,
+      {
+        username: usernameReg,
+        password: passwordReg,
+        email: emailReg,
+      }
+    );
+
     if (register.data?.error) {
       setRegisterstatus(register.data.error);
     } else {

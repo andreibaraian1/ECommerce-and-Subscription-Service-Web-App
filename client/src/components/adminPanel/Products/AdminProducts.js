@@ -14,7 +14,7 @@ const AdminProducts = () => {
   }, []);
 
   const fetchProducts = () => {
-    Axios.get("http://localhost:3001/products/getProducts")
+    Axios.get(`${process.env.REACT_APP_HOSTNAME}/products/getProducts`)
       .then((response) => {
         const result = response.data.sort((a, b) => a.id - b.id);
         setProducts(result);
@@ -35,7 +35,7 @@ const AdminProducts = () => {
   const handleUpdate = async (index) => {
     const product = products[index];
     await Axios.post(
-      "http://localhost:3001/products/updateProducts",
+      `${process.env.REACT_APP_HOSTNAME}/products/updateProducts`,
       [product],
       {
         withCredentials: true,
@@ -49,9 +49,12 @@ const AdminProducts = () => {
     fetchProducts();
   };
   const handleDelete = async (index) => {
-    await Axios.get(`http://localhost:3001/products/deleteProduct/${index}`, {
-      withCredentials: true,
-    });
+    await Axios.get(
+      `${process.env.REACT_APP_HOSTNAME}/products/deleteProduct/${index}`,
+      {
+        withCredentials: true,
+      }
+    );
     toast.success(`Product deleted`, {
       duration: 1500,
       position: "top-right",
@@ -62,10 +65,15 @@ const AdminProducts = () => {
     <>
       <Toaster />
 
-      {form && <AddProduct fetchProducts={fetchProducts} closeForm={()=>setForm(false)}/>}
+      {form && (
+        <AddProduct
+          fetchProducts={fetchProducts}
+          closeForm={() => setForm(false)}
+        />
+      )}
       <Button
         onClick={() => {
-          setForm((prev)=>!prev);
+          setForm((prev) => !prev);
         }}
       >
         {form ? "Cancel" : "Add Product"}

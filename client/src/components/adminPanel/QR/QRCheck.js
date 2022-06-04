@@ -10,7 +10,7 @@ const QRCheck = () => {
   useEffect(() => {
     const checkToken = () => {
       Axios.post(
-        "http://localhost:3001/users/checkQRToken",
+        `${process.env.REACT_APP_HOSTNAME}/users/checkQRToken`,
         { token: data },
         { withCredentials: true }
       ).then((res) => {
@@ -41,7 +41,6 @@ const QRCheck = () => {
         }}
         style={{ width: "20%" }}
       />
-      
     </>
   );
 };

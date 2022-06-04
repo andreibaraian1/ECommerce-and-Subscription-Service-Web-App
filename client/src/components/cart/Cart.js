@@ -18,7 +18,7 @@ const Cart = (props) => {
   const [disabled, setDisabled] = useState(false);
   const [page, setPage] = useState(1);
   const fetchCart = () => {
-    Axios.get("http://localhost:3001/cart/getCart", {
+    Axios.get(`${process.env.REACT_APP_HOSTNAME}/cart/getCart`, {
       withCredentials: true,
     }).then((res) => {
       const cart = res.data;
@@ -74,7 +74,7 @@ const Cart = (props) => {
       quantity: parseInt(value),
     };
     Axios.post(
-      "http://localhost:3001/cart/insertCart",
+      `${process.env.REACT_APP_HOSTNAME}/cart/insertCart`,
       { product },
       { withCredentials: true }
     ).then(() => fetchCart());

@@ -60,8 +60,8 @@ const sendOrder = async (idUser, cart, total, shippingInfo, paymentMethod) => {
       const session = await stripe.checkout.sessions.create({
         line_items: items,
         mode: "payment",
-        success_url: `http://localhost:3000/`,
-        cancel_url: `http://localhost:3000/`,
+        success_url: process.env.HOSTNAME,
+        cancel_url: process.env.HOSTNAME,
       });
       const valid = await insertOrder(
         idUser,

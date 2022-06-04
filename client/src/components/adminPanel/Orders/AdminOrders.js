@@ -1,5 +1,5 @@
 import { Table } from "react-bootstrap";
-import {  Button, Divider, Select, MenuItem } from "@mui/material";
+import { Button, Divider, Select, MenuItem } from "@mui/material";
 import { useEffect, useState } from "react";
 import Axios from "axios";
 import styles from "./AdminOrders.module.css";
@@ -9,7 +9,7 @@ const AdminOrders = () => {
     fetchOrders();
   }, []);
   const fetchOrders = () => {
-    Axios.get("http://localhost:3001/order/getOrdersAdmin", {
+    Axios.get(`${process.env.REACT_APP_HOSTNAME}/order/getOrdersAdmin`, {
       withCredentials: true,
     })
       .then((response) => {
@@ -41,7 +41,7 @@ const AdminOrders = () => {
   };
   const handleUpdate = async (id, index) => {
     await Axios.post(
-      "http://localhost:3001/order/updateOrder",
+      `${process.env.REACT_APP_HOSTNAME}/order/updateOrder`,
       [
         {
           id,
@@ -55,9 +55,12 @@ const AdminOrders = () => {
     fetchOrders();
   };
   const handleDelete = async (index) => {
-    await Axios.get(`http://localhost:3001/order/deleteOrder/${index}`, {
-      withCredentials: true,
-    });
+    await Axios.get(
+      `${process.env.REACT_APP_HOSTNAME}/order/deleteOrder/${index}`,
+      {
+        withCredentials: true,
+      }
+    );
     fetchOrders();
   };
   return (

@@ -25,7 +25,7 @@ const Profile = () => {
   const [zipcode, setZipcode] = useState("");
   const [state, setState] = useState("");
   useEffect(() => {
-    Axios.get("http://localhost:3001/users/getUserInfo", {
+    Axios.get(`${process.env.REACT_APP_HOSTNAME}/users/getUserInfo`, {
       withCredentials: true,
     }).then((res) => {
       if (res.data?.error) {
@@ -68,16 +68,19 @@ const Profile = () => {
       state,
     };
     const updateUser = await Axios.post(
-      "http://localhost:3001/users/updateUserInfo",
+      `${process.env.REACT_APP_HOSTNAME}/users/updateUserInfo`,
       { user },
       { withCredentials: true }
     );
     console.log(updateUser);
   };
   const handleQR = async () => {
-    const getQR = await Axios.get("http://localhost:3001/users/getQRToken", {
-      withCredentials: true,
-    });
+    const getQR = await Axios.get(
+      `${process.env.REACT_APP_HOSTNAME}/users/getQRToken`,
+      {
+        withCredentials: true,
+      }
+    );
     setQR(getQR.data);
   };
   return (
@@ -99,7 +102,9 @@ const Profile = () => {
           </Typography>
         </Col>
         <Button onClick={() => setVisible((prev) => !prev)}>
-          {visible ? "Hide personal information" : "Change personal information"}
+          {visible
+            ? "Hide personal information"
+            : "Change personal information"}
         </Button>
         {visible && (
           <>

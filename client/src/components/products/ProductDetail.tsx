@@ -5,32 +5,32 @@ import { useDispatch } from "react-redux";
 import { setModal, setModalMessage } from "../../actions";
 import { Card, Button, Form } from "react-bootstrap";
 import { Input } from "@mui/material";
-import styles from './ProductDetail.module.css';
+import styles from "./ProductDetail.module.css";
 interface product {
-  id:number,
-  image:string,
-  name:string,
-  price:number,
-  stock:number,
+  id: number;
+  image: string;
+  name: string;
+  price: number;
+  stock: number;
 }
-const ProductDetail:React.FC = () => {
+const ProductDetail: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { id } = useParams();
-  const [product, setProduct]  = useState<product>({} as any);
+  const [product, setProduct] = useState<product>({} as any);
   const [quantity, setQuantity] = useState(1);
 
   useEffect(() => {
     const fetchProduct = async () => {
       const getProduct = await Axios.get(
-        `http://localhost:3001/products/getProduct/${id}`
+        `${process.env.REACT_APP_HOSTNAME}/products/getProduct/${id}`
       );
       const product = getProduct.data;
       setProduct(product);
     };
     fetchProduct();
   }, [id]);
-  const addtocart = async (event:any) => {
+  const addtocart = async (event: any) => {
     event.preventDefault();
     const { id } = product;
     const cartProduct = {
@@ -38,7 +38,7 @@ const ProductDetail:React.FC = () => {
       quantity: quantity,
     };
     const insertCart = await Axios.post(
-      "http://localhost:3001/cart/insertCart",
+      `${process.env.REACT_APP_HOSTNAME}/cart/insertCart`,
       { product: cartProduct },
       { withCredentials: true }
     );

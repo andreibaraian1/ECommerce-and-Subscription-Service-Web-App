@@ -6,7 +6,7 @@ const cookieParser = require("cookie-parser");
 const { checkStripePayments } = require("./services/order.services");
 dotenv.config();
 app.use(cookieParser());
-app.use(cors({ credentials: true, origin: "http://localhost:3000" }));
+app.use(cors({ credentials: true, origin: process.env.HOSTNAME }));
 
 app.use((req, res, next) => {
   if (req.originalUrl === "/webhook") {
@@ -20,7 +20,7 @@ let minutes = 30;
 let interval = minutes * 60 * 1000;
 setInterval(() => {
   console.log("Started stripe payment checks");
-  checkStripePayments()
+  checkStripePayments();
 }, interval);
 
 const usersRouter = require("./routes/users.routes");

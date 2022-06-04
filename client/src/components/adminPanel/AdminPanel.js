@@ -27,7 +27,7 @@ const AdminPanel = () => {
   const [nav, setNav] = useState("");
   const [time, setTime] = useState(`00:00`);
   useEffect(() => {
-    Axios.get("http://localhost:3001/users/getUser", {
+    Axios.get(`${process.env.REACT_APP_HOSTNAME}/users/getUser`, {
       withCredentials: true,
     }).then((res) => {
       dispatch(setUser(res.data.user));
@@ -37,7 +37,9 @@ const AdminPanel = () => {
     });
   }, [dispatch, navigate]);
   const getTime = async () => {
-    const res = await Axios.get("http://localhost:3001/users/getTime");
+    const res = await Axios.get(
+      `${process.env.REACT_APP_HOSTNAME}/users/getTime`
+    );
     const hours = res.data.closingHours;
     const minutes = res.data.closingMinutes;
     console.log(hours, minutes);
@@ -51,7 +53,7 @@ const AdminPanel = () => {
   };
   const submitTime = async () => {
     const res = await Axios.post(
-      "http://localhost:3001/users/setTime",
+      `${process.env.REACT_APP_HOSTNAME}/users/setTime`,
       { time },
       {
         withCredentials: true,

@@ -15,9 +15,12 @@ const Orders = () => {
   useEffect(() => {
     document.body.style.overflow = "visible";
     const getOrders = async () => {
-      const result = await Axios.get("http://localhost:3001/order/getOrders", {
-        withCredentials: true,
-      });
+      const result = await Axios.get(
+        `${process.env.REACT_APP_HOSTNAME}/order/getOrders`,
+        {
+          withCredentials: true,
+        }
+      );
       setAllorders(result.data);
       setOrders(result.data);
       if (result?.data?.error) {

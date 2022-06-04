@@ -2,12 +2,12 @@ import Axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setUser } from "../../actions";
-import styles from './Login.module.css';
+import styles from "./Login.module.css";
 const Logout = (props) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const getLogout = () => {
-    Axios.get("http://localhost:3001/users/logout", {
+    Axios.get(`${process.env.REACT_APP_HOSTNAME}/users/logout`, {
       withCredentials: true,
     }).then((res) => {
       if (res.status === 200) dispatch(setUser(null));

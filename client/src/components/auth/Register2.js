@@ -37,7 +37,7 @@ const Register2 = () => {
       setErrorMessage("Passwords do not match");
       return;
     }
-    const register = await Axios.post("http://localhost:3001/users/register", {
+    const register = await Axios.post(`${process.env.REACT_APP_HOSTNAME}/users/register`, {
       username,
       password,
       email,

@@ -5,7 +5,7 @@ import { setUser, setProducts } from "../actions";
 const Fetch = () => {
   const dispatch = useDispatch();
   useEffect(() => {
-    Axios.get("http://localhost:3001/users/getUser", {
+    Axios.get(`${process.env.REACT_APP_HOSTNAME}/users/getUser`, {
       withCredentials: true,
     })
       .then((res) => {
@@ -16,7 +16,7 @@ const Fetch = () => {
         console.log(err);
       });
 
-    Axios.get("http://localhost:3001/products/getProducts")
+    Axios.get(`${process.env.REACT_APP_HOSTNAME}/products/getProducts`)
       .then((response) => {
         dispatch(setProducts(response.data));
       })

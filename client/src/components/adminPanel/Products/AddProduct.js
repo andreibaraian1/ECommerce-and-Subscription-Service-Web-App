@@ -36,9 +36,13 @@ const AddProduct = (props) => {
       category,
       details: detail,
     };
-    await Axios.post("http://localhost:3001/products/addProducts", [product], {
-      withCredentials: true,
-    });
+    await Axios.post(
+      `${process.env.REACT_APP_HOSTNAME}/products/addProducts`,
+      [product],
+      {
+        withCredentials: true,
+      }
+    );
 
     props.fetchProducts();
     props.closeForm();

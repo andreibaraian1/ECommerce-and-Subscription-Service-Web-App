@@ -28,7 +28,7 @@ const Product: React.FC<Props> = (props) => {
     };
     console.log(insertProduct);
     const insertCart = await Axios.post(
-      "http://localhost:3001/cart/insertCart",
+      `${process.env.REACT_APP_HOSTNAME}/cart/insertCart`,
       { product: insertProduct },
       { withCredentials: true }
     );

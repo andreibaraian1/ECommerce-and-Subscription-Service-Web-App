@@ -9,7 +9,9 @@ const AdminUsers = () => {
     fetchUsers();
   }, []);
   const fetchUsers = () => {
-    Axios.get("http://localhost:3001/users/getUsers", { withCredentials: true })
+    Axios.get(`${process.env.REACT_APP_HOSTNAME}/users/getUsers`, {
+      withCredentials: true,
+    })
       .then((response) => {
         const result = response.data.sort((a, b) => a.id - b.id);
         setUsers(result);
@@ -29,7 +31,7 @@ const AdminUsers = () => {
   };
   const handleUpdate = async (id, index) => {
     await Axios.post(
-      "http://localhost:3001/users/updateRole",
+      `${process.env.REACT_APP_HOSTNAME}/users/updateRole`,
       { id, role: users[index].role },
       {
         withCredentials: true,
@@ -47,7 +49,7 @@ const AdminUsers = () => {
     const id = event.target[1].value;
     console.log(days, id);
     await Axios.post(
-      "http://localhost:3001/users/updateSubscription",
+      `${process.env.REACT_APP_HOSTNAME}/users/updateSubscription`,
       { id, days },
       {
         withCredentials: true,
