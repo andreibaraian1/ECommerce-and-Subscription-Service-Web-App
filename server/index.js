@@ -5,7 +5,6 @@ const dotenv = require("dotenv");
 const cookieParser = require("cookie-parser");
 const { checkStripePayments } = require("./services/order.services");
 dotenv.config();
-// app.use(express.json());
 app.use(cookieParser());
 app.use(cors({ credentials: true, origin: "http://localhost:3000" }));
 

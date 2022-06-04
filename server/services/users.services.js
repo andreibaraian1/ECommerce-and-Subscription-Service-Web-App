@@ -14,7 +14,6 @@ const login = async (username, password) => {
   const { rowCount } = result;
 
   if (rowCount === 0) {
-    //   res.status(200).send("Username does not exist");
     return {
       status: 200,
       error: "Incorrect username or password",
@@ -24,8 +23,6 @@ const login = async (username, password) => {
     const compare = await bcrypt.compare(password, user.password);
     if (compare) {
       const token = generateAccessToken(user);
-      //   res.cookie("token", token, { maxage: 86400, httpOnly: true });
-      //   res.status(200).json({ message: "Succesfully logged in !" });
       return {
         status: 200,
         token,
@@ -95,7 +92,11 @@ const checkQrCode = (token) => {
   }
   try {
     const data = jwt.verify(token, process.env.TOKEN_SECRET);
-    return data.id;
+    if (data.id) {
+      return data.id;
+    } else {
+      return false;
+    }
   } catch {
     return false;
   }
@@ -124,5 +125,5 @@ module.exports = {
   generateAccessToken,
   manageSubscription,
   genereateQrCode,
-  checkQrCode
+  checkQrCode,
 };
