@@ -6,18 +6,12 @@ import { setModal, setModalMessage } from "../../actions";
 import { Card, Button, Form } from "react-bootstrap";
 import { Input } from "@mui/material";
 import styles from "./ProductDetail.module.css";
-interface product {
-  id: number;
-  image: string;
-  name: string;
-  price: number;
-  stock: number;
-}
-const ProductDetail: React.FC = () => {
+
+const ProductDetail= () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { id } = useParams();
-  const [product, setProduct] = useState<product>({} as any);
+  const [product, setProduct] = useState({});
   const [quantity, setQuantity] = useState(1);
 
   useEffect(() => {
@@ -30,7 +24,7 @@ const ProductDetail: React.FC = () => {
     };
     fetchProduct();
   }, [id]);
-  const addtocart = async (event: any) => {
+  const addtocart = async (event) => {
     event.preventDefault();
     const { id } = product;
     const cartProduct = {
@@ -73,7 +67,7 @@ const ProductDetail: React.FC = () => {
         <Form>
           <Input
             type="number"
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+            onChange={(e) => {
               setQuantity(Number(e.target.value));
             }}
             value={quantity}

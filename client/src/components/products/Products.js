@@ -3,32 +3,21 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Container from "react-bootstrap/Container";
 import styles from "./Products.module.css";
-import { RootStateOrAny, useSelector } from "react-redux";
-//@ts-ignore
+import { useSelector } from "react-redux";
 import ProductsCategories from "./ProductsCategories";
 import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 
-interface product {
-  id: number;
-  image: string;
-  name: string;
-  price: number;
-  stock: number;
-  category: string;
-}
-const Products: React.FC = () => {
-  const [filteredItems, setFilteredItems] = useState<Array<product> | null>(
-    null
-  );
+const Products = () => {
+  const [filteredItems, setFilteredItems] = useState(null);
   const category = useParams();
-  const products = useSelector((state: RootStateOrAny) => state.products);
+  const products = useSelector((state) => state.products);
   useEffect(() => {
-    const prod = products?.sort((a: product, b: product) => b.stock - a.stock);
+    const prod = products?.sort((a, b) => b.stock - a.stock);
     if (prod) {
       if (category.category) {
-        const filtered = prod.filter((product: product) => {
+        const filtered = prod.filter((product) => {
           return product.category === category.category;
         });
         setFilteredItems(filtered);
@@ -50,7 +39,7 @@ const Products: React.FC = () => {
           </Col>
           <Col>
             <Row>
-              {filteredItems?.map((product: product) => (
+              {filteredItems?.map((product) => (
                 <Col md="4" key={product.id}>
                   <Product key={product.id} product={product} />
                 </Col>

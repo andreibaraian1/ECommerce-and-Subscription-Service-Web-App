@@ -55,9 +55,6 @@ const register = async (username, password, email) => {
         error: "Username already exists. Please choose another one",
       };
     }
-    //   res
-    //     .status(409)
-    //     .send("Username already exists. Please choose another one");
     if (constraint == "users_email_key") {
       return {
         status: 200,
@@ -107,9 +104,9 @@ const manageSubscription = async (userId, time) => {
   ]);
   let newDate;
   const user = userQuery.rows[0];
-  if (user?.subscription) {
-    date = new Date(user.subscription);
-
+  let date;
+  if (user?.subscription) date = new Date(user.subscription);
+  if (date && date > new Date()) {
     newDate = new Date(date.getTime() + time * 24 * 60 * 60 * 1000);
   } else {
     newDate = new Date(new Date().getTime() + time * 24 * 60 * 60 * 1000);

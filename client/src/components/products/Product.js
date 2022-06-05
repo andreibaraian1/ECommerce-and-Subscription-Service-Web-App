@@ -5,18 +5,7 @@ import Axios from "axios";
 import { useDispatch } from "react-redux";
 import { setModal, setModalMessage } from "../../actions";
 
-interface Props {
-  product: product;
-}
-interface product {
-  id: number;
-  image: string;
-  name: string;
-  price: number;
-  stock: number;
-}
-
-const Product: React.FC<Props> = (props) => {
+const Product = (props) => {
   const product = props.product;
 
   const dispatch = useDispatch();
