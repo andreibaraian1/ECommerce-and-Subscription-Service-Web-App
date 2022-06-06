@@ -143,9 +143,17 @@ const checkQrCode = async (req, res) => {
     "SELECT subscription FROM USERS WHERE id=$1",
     [userId]
   );
-  const subscription = new Date(rows[0].subscription);
+  const subscription = rows[0].subscription
+    ? new Date(rows[0]?.subscription)
+    : null;
   const today = new Date();
-  if (subscription > today) {
+  if (!subscription) {
+    return res.status(200).json({
+      message: `No subscription found`,
+      valid: false,
+    });
+  }
+  if (subscription && subscription > today) {
     res.status(200).json({
       message: `Subscription valid until ${subscription.toString()}`,
       valid: true,
