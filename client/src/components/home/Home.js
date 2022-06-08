@@ -1,7 +1,6 @@
 import styles from "./Home.module.css";
 import { Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import background from "../../images/fitness.jpg";
 import { useEffect, useState } from "react";
 import Axios from "axios";
 const Home = () => {
@@ -11,9 +10,10 @@ const Home = () => {
   const [closed, setClosed] = useState(true);
 
   useEffect(() => {
-    document.body.style.overflow = "hidden";
     const getTime = async () => {
-      const res = await Axios.get(`${process.env.REACT_APP_HOSTNAME}/users/getClosingTime`);
+      const res = await Axios.get(
+        `${process.env.REACT_APP_HOSTNAME}/users/getClosingTime`
+      );
       if (!res.data.closed) {
         setHoursUntilClose(res.data.hours);
         setMinutesUntilClose(res.data.minutes);
@@ -21,14 +21,13 @@ const Home = () => {
       }
     };
     getTime();
-    console.log(process.env.REACT_APP_HOSTNAME)
   }, []);
   return (
     <>
       <div
         id="main"
         className={styles.main}
-        style={{ backgroundImage: `url(${background})` }}
+        style={{ backgroundImage: `url(images/home.jpg)` }}
       >
         <div className={styles.content}>
           {!closed ? (
@@ -41,6 +40,7 @@ const Home = () => {
 
           <h1>POWER GYM</h1>
           <Button
+            id="shop"
             style={{ width: 500, height: 70 }}
             size="large"
             variant="contained"

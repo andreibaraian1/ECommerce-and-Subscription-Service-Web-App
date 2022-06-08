@@ -13,7 +13,6 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setUser } from "../../actions";
 import { Link } from "react-router-dom";
-import image from "../../images/1.jpg";
 const theme = createTheme();
 
 const Login = () => {
@@ -66,7 +65,7 @@ const Login = () => {
           sm={4}
           md={7}
           sx={{
-            backgroundImage: `url(${image})`,
+            backgroundImage: `url(images/log.jpg)`,
             backgroundRepeat: "no-repeat",
             backgroundColor: (t) =>
               t.palette.mode === "light"

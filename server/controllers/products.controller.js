@@ -39,7 +39,6 @@ const updateProduct = async (req, res) => {
     res.status(200).send("Product updated");
   } catch (err) {
     res.status(500).send("Unexpected error");
-
   }
 };
 const deleteProduct = async (req, res) => {
@@ -48,12 +47,8 @@ const deleteProduct = async (req, res) => {
     return res.status(200).send("User is not admin");
   }
   const id = +req.params.id;
-  console.log(id);
   try {
-    const deleteProduct = await pool.query("DELETE FROM products WHERE id=$1", [
-      id,
-    ]);
-    console.log(deleteProduct);
+    await pool.query("DELETE FROM products WHERE id=$1", [id]);
     res.status(200).send("Product deleted");
   } catch (err) {
     res.status(500).send("Unexpected error");
@@ -65,7 +60,6 @@ const addProduct = async (req, res) => {
   if (role === 0) {
     return res.status(200).send("User is not admin");
   }
-  console.log(product);
   try {
     const insertProduct = await pool.query(
       "INSERT INTO products (name,stock,image,price,category,details) VALUES ($1,$2,$3,$4,$5,$6)",
@@ -78,7 +72,6 @@ const addProduct = async (req, res) => {
         product.details,
       ]
     );
-    console.log(insertProduct);
     res.status(200).send("Product inserted");
   } catch (err) {
     res.status(500).send("Unexpected error");

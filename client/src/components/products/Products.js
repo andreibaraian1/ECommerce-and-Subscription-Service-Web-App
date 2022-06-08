@@ -40,7 +40,11 @@ const Products = () => {
           <Col>
             <Row>
               {filteredItems?.map((product) => (
-                <Col md="4" key={product.id}>
+                <Col
+                  md="4"
+                  key={`product-${product.id}`}
+                  id={`product-${product.id}`}
+                >
                   <Product key={product.id} product={product} />
                 </Col>
               ))}

@@ -1,4 +1,4 @@
-import Register from "./components/auth/Register2";
+import Register from "./components/auth/Register";
 import Login from "./components/auth/Login";
 import Products from "./components/products/Products";
 import ProductDetail from "./components/products/ProductDetail";
@@ -15,7 +15,6 @@ import { useSelector } from "react-redux";
 import ModalLayout from "./components/UI/ModalLayout";
 import Fetch from "./api/Fetch";
 import Orders from "./components/orders/Orders";
-import styles from "./App.module.css";
 import Home from "./components/home/Home";
 import Profile from "./components/profile/Profile";
 import AdminPanel from "./components/adminPanel/AdminPanel";
@@ -26,7 +25,7 @@ function App() {
   Fetch();
 
   return (
-    <div className={styles.background}>
+    <div>
       <Router>
         <Navbar />
         {modal && <ModalLayout message={modalMessage} />}
