@@ -189,7 +189,8 @@ const getClosingTime = async (req, res) => {
     }
     let closed = false;
     minutes = Math.floor(minutes);
-    if (hours == 0 && minutes <= 0) {
+    const startingHours = now.getHours();
+    if ((hours == 0 && minutes <= 0) || startingHours < 9) {
       closed = true;
     }
     return res.status(200).json({ closed, hours, minutes });
