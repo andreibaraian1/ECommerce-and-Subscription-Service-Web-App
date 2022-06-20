@@ -1,9 +1,13 @@
 .product {
-    background: #fff;
-    max-width: 300px;
-    z-index: 15;
-    margin:5%;
+  background: #fff;
+  max-width: 300px;
+  z-index: 15;
+  margin: 5%;
+}
+.product :not(button) :not(img) {
+  justify-content: center;
+  align-items: center;
 }
 img {
-    width:150px;
+  width: 150px;
 }

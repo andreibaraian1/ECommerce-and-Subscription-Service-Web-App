@@ -11,7 +11,7 @@ import {
   FormControl,
 } from "@mui/material";
 import Axios from "axios";
-import Fetch from "../../api/Fetch";
+import { useFetch } from "../../api/useFetch";
 import { useNavigate } from "react-router-dom";
 import styles from "./OrderInfo.module.css";
 const OrderInfo = (props) => {
@@ -25,6 +25,7 @@ const OrderInfo = (props) => {
   const [region, setRegion] = useState("");
   const [message, setMessage] = useState("");
   const [paymentMethod, setPaymentMethod] = useState("Card");
+  const { fetcher } = useFetch();
   const sendOrder = async () => {
     if (
       !firstName ||
@@ -58,7 +59,7 @@ const OrderInfo = (props) => {
         window.location.href = result.data.url;
       } else {
         navigate("/"); //navigate to order
-        Fetch();
+        fetcher();
       }
     }
   };

@@ -1,17 +1,22 @@
-
 .category a {
   text-decoration: none;
   padding: 12px 25px;
   text-align: center;
   text-decoration: none;
-  display: inline-block;
 }
 .category a:hover {
-    background-color: white;
+  background-color: white;
 }
 .currentLink {
-  color: blue;
+  color: green;
+  text-decoration: none;
 }
 .link {
   color: black;
+  text-decoration: none;
+}
+.nav {
+  align-items: center;
+  justify-content: center;
+  flex: 1;
 }

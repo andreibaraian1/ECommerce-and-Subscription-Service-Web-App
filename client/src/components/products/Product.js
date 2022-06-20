@@ -29,12 +29,16 @@ const Product = (props) => {
   return (
     <Card key={product.id} className={styles.product}>
       <Link to={`/products/${product.id}`}>
-        <Card.Img src={`/images/${product.image}`} alt={product.name} />
-        <Card.Body>
-          <Card.Text>{product.name}</Card.Text>
-        </Card.Body>
+        <Card.Img
+          src={`/images/${product.image}`}
+          alt={product.name}
+          styles={{ width: "150px" }}
+        />
       </Link>
-      <Card.Text>{product.price} lei</Card.Text>
+      <Card.Body>
+        <Card.Text>{product.name}</Card.Text>
+        <Card.Text>{product.price} lei</Card.Text>
+      </Card.Body>
       {product.stock ? (
         <Button onClick={addToCart}>Add to cart</Button>
       ) : (

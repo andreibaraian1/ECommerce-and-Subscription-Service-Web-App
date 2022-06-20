@@ -1,10 +1,8 @@
-body {
-  overflow: hidden;
-}
 .main {
-  height: 100vh;
+  height: calc(100vh - 70px);
   background-position: center;
   background-size: cover;
+  overflow: hidden;
 }
 .content {
   position: absolute;
@@ -32,9 +30,9 @@ body {
     justify-items: center;
     width: 100%;
     flex: 1;
-    
   }
-  .content h1,h3 {
-   font-size:2em;
+  .content h1,
+  h3 {
+    font-size: 2em;
   }
 }

@@ -6,7 +6,7 @@ import { Navbar as Navi, Container, Nav } from "react-bootstrap";
 const Navbar = () => {
   const user = useSelector((state) => state.user);
   return (
-    <div>
+    <>
       <Navi sticky="top" bg="dark" variant="dark" className={styles.navbar}>
         <Container>
           <Navi.Brand>
@@ -57,7 +57,7 @@ const Navbar = () => {
           )}
         </Container>
       </Navi>
-    </div>
+    </>
   );
 };
 

@@ -1,7 +1,4 @@
 import Product from "./Product";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
-import Container from "react-bootstrap/Container";
 import styles from "./Products.module.css";
 import { useSelector } from "react-redux";
 import ProductsCategories from "./ProductsCategories";
@@ -26,33 +23,29 @@ const Products = () => {
   }, [category.category, products]);
 
   return (
-    <div className={styles.body}>
-      <Container className={styles.products}>
-        <Row>
-          <Col md="2">
-            {category.category && (
-              <Link to={`/shop`}>
-                <p>Remove filters</p>
-              </Link>
-            )}
-            <ProductsCategories />
-          </Col>
-          <Col>
-            <Row>
-              {filteredItems?.map((product) => (
-                <Col
-                  md="4"
-                  key={`product-${product.id}`}
-                  id={`product-${product.id}`}
-                >
-                  <Product key={product.id} product={product} />
-                </Col>
-              ))}
-            </Row>
-          </Col>
-        </Row>
-      </Container>
-    </div>
+    <>
+      <div className={styles.container}>
+        <div className={styles.categories}>
+          {category.category && (
+            <Link to={`/shop`}>
+              <p>Remove filters</p>
+            </Link>
+          )}
+          <ProductsCategories />
+        </div>
+        <div className={styles.productsContainer}>
+          {filteredItems?.map((product) => (
+            <div
+              key={`product-${product.id}`}
+              id={`product-${product.id}`}
+              className={styles.product}
+            >
+              <Product key={product.id} product={product} />
+            </div>
+          ))}
+        </div>
+      </div>
+    </>
   );
 };
 

@@ -45,7 +45,6 @@ const AdminProducts = () => {
       duration: 1500,
       position: "top-right",
     });
-
     fetchProducts();
   };
   const handleDelete = async (index) => {

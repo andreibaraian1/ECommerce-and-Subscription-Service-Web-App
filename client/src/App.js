@@ -13,19 +13,22 @@ import Logout from "./components/auth/Logout";
 import Cart from "./components/cart/Cart";
 import { useSelector } from "react-redux";
 import ModalLayout from "./components/UI/ModalLayout";
-import Fetch from "./api/Fetch";
+import { useFetch } from "./api/useFetch";
 import Orders from "./components/orders/Orders";
 import Home from "./components/home/Home";
 import Profile from "./components/profile/Profile";
 import AdminPanel from "./components/adminPanel/AdminPanel";
+import { useEffect } from "react";
 
 function App() {
   const modal = useSelector((state) => state.modal);
   const modalMessage = useSelector((state) => state.modalMessage);
-  Fetch();
-
+  const { fetcher } = useFetch();
+  useEffect(() => {
+    fetcher();
+  }, [fetcher]);
   return (
-    <div>
+    <div style={{ height: "100%" }}>
       <Router>
         <Navbar />
         {modal && <ModalLayout message={modalMessage} />}

@@ -1,14 +1,8 @@
-import {
-  Button,
-  TextField,
-  FormControl,
-  Select,
-  MenuItem,
-} from "@mui/material";
+import { Button, TextField, FormControl } from "@mui/material";
 import { useState } from "react";
 import Axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
-
+import { useFetch } from "../../../api/useFetch";
 const AddProduct = (props) => {
   const [name, setName] = useState("");
   const [stock, setStock] = useState("");
@@ -16,6 +10,7 @@ const AddProduct = (props) => {
   const [price, setPrice] = useState("");
   const [category, setCategory] = useState("");
   const [details, setDetails] = useState("");
+  const { fetcher } = useFetch();
 
   const handleSubmit = async () => {
     if (!name || !stock || !image || !price || !category) {
@@ -43,9 +38,9 @@ const AddProduct = (props) => {
         withCredentials: true,
       }
     );
-
     props.fetchProducts();
     props.closeForm();
+    fetcher();
   };
   return (
     <>
@@ -75,10 +70,12 @@ const AddProduct = (props) => {
           value={price}
           onChange={(e) => setPrice(e.target.value)}
         ></TextField>
-        <Select value={category} onChange={(e) => setCategory(e.target.value)}>
-          <MenuItem value={"product"}>Product</MenuItem>
-          <MenuItem value={"subscription"}>Subscription</MenuItem>
-        </Select>
+        <TextField
+          hiddenLabel
+          placeholder="category"
+          value={category}
+          onChange={(e) => setCategory(e.target.value)}
+        ></TextField>
         <TextField
           hiddenLabel
           placeholder="Details"
