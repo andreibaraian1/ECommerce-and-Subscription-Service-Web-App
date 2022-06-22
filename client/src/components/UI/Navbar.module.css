@@ -1,18 +1,27 @@
 .navbar {
-  height: 7%;
-  position: fixed;
-  top: 0;
   width: 100%;
   height: 100%;
+  position: fixed;
+  top: 0;
+  flex: 1;
+}
+.container {
+  gap: 10px;
 }
 .navLeft {
-  float: left;
+  justify-content: flex-start;
+  align-items: flex-start;
 }
 .navbarLink {
   text-decoration: none;
   color: white;
-  margin: 15px;
 }
 .navRight {
-  float: right;
+  justify-content: flex-end;
+  align-items: flex-end;
+}
+@media screen and (max-width: 425px) {
+  .navHidden {
+    display: none;
+  }
 }

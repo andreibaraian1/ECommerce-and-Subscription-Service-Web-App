@@ -9,6 +9,7 @@ const Home = () => {
   const [minutesUntilClose, setMinutesUntilClose] = useState(0);
   const [loading, setLoading] = useState(true);
   const [closed, setClosed] = useState(true);
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
     const getTime = async () => {
@@ -23,6 +24,10 @@ const Home = () => {
       }
     };
     getTime();
+  }, []);
+
+  useEffect(() => {
+    if (window.innerWidth <= 550) setIsMobile(true);
   }, []);
   return (
     <>
@@ -45,7 +50,7 @@ const Home = () => {
           <h1>POWER GYM</h1>
           <Button
             id="shop"
-            style={{ width: 500, height: 70 }}
+            style={isMobile ? undefined : { width: 500, height: 70 }}
             size="large"
             variant="contained"
             color="success"

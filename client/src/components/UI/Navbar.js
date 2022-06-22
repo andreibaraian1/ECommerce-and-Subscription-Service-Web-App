@@ -8,9 +8,9 @@ const Navbar = () => {
   return (
     <>
       <Navi sticky="top" bg="dark" variant="dark" className={styles.navbar}>
-        <Container>
+        <Container className={styles.container}>
           <Navi.Brand>
-            <Link className={styles.navbarLink} to="/">
+            <Link className={`${styles.navbarLink} ${styles.navHidden}`} to="/">
               Power Gym
             </Link>
           </Navi.Brand>
@@ -23,37 +23,49 @@ const Navbar = () => {
           </Nav>
 
           {!user && (
-            <Nav className={styles.navRight}>
-              <Link className={styles.navbarLink} to="/login">
-                Login
-              </Link>
-
-              <Link className={styles.navbarLink} to="/register">
-                Register
-              </Link>
-            </Nav>
+            <>
+              <Nav className={styles.navRight}>
+                <Link className={styles.navbarLink} to="/login">
+                  Login
+                </Link>
+              </Nav>
+              <Nav className={styles.navRight}>
+                <Link className={styles.navbarLink} to="/register">
+                  Register
+                </Link>
+              </Nav>
+            </>
           )}
           {user && (
-            <Nav className={styles.navRight}>
-              {user.role === 1 && (
-                <Link className={styles.navbarLink} to="/admin">
-                  Admin Panel
+            <>
+              <Nav className={styles.navRight}>
+                {user.role === 1 && (
+                  <Link className={styles.navbarLink} to="/admin">
+                    Admin Panel
+                  </Link>
+                )}
+              </Nav>
+              <Nav className={styles.navRight}>
+                <Link className={styles.navbarLink} to="/cart">
+                  Cart
                 </Link>
-              )}
-              <Link className={styles.navbarLink} to="/cart">
-                Cart
-              </Link>
-
-              <Link className={styles.navbarLink} to="/orders">
-                Orders
-              </Link>
-              <Link className={styles.navbarLink} to="/profile">
-                Profile
-              </Link>
-              <Link className={styles.navbarLink} to="/logout">
-                Logout
-              </Link>
-            </Nav>
+              </Nav>
+              <Nav className={styles.navRight}>
+                <Link className={styles.navbarLink} to="/orders">
+                  Orders
+                </Link>
+              </Nav>
+              <Nav className={styles.navRight}>
+                <Link className={styles.navbarLink} to="/profile">
+                  Profile
+                </Link>
+              </Nav>
+              <Nav className={styles.navRight}>
+                <Link className={styles.navbarLink} to="/logout">
+                  Logout
+                </Link>
+              </Nav>
+            </>
           )}
         </Container>
       </Navi>

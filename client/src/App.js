@@ -24,9 +24,11 @@ function App() {
   const modal = useSelector((state) => state.modal);
   const modalMessage = useSelector((state) => state.modalMessage);
   const { fetcher } = useFetch();
+  
   useEffect(() => {
     fetcher();
   }, [fetcher]);
+
   return (
     <div style={{ height: "100%" }}>
       <Router>
