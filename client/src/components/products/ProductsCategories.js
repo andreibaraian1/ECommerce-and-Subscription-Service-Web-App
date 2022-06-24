@@ -3,7 +3,7 @@ import styles from "./ProductsCategories.module.css";
 import { Link, useParams } from "react-router-dom";
 import { Nav, Navbar } from "react-bootstrap";
 
-const ProductsCategories = () => {
+const ProductsCategories = ({ enabled }) => {
   const currentCategory = useParams();
   const products = useSelector((state) => state.products);
   let categories = null;
@@ -21,6 +21,16 @@ const ProductsCategories = () => {
           bg="light"
           className="justify-content-center"
         >
+          {enabled && (
+            <Nav className={styles.nav}>
+              <Link
+                className={`${styles.link} ${styles.removeFilter}`}
+                to={`/shop`}
+              >
+                Remove filters
+              </Link>
+            </Nav>
+          )}
           {categories.map((category) => (
             <Nav key={category} className={styles.nav}>
               <Link

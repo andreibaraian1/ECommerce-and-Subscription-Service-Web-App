@@ -40,9 +40,11 @@ const Product = (props) => {
         <Card.Text>{product.price} lei</Card.Text>
       </Card.Body>
       {product.stock ? (
-        <Button onClick={addToCart}>Add to cart</Button>
+        <Button variant="info" onClick={addToCart}>
+          Add to cart
+        </Button>
       ) : (
-        <Button disabled>Sold out</Button>
+        <Button variant="danger" disabled>Sold out</Button>
       )}
     </Card>
   );

@@ -9,7 +9,7 @@
 }
 .currentLink {
   color: green;
-  text-decoration: none;
+  text-decoration: underline;
 }
 .link {
   color: black;
@@ -19,4 +19,7 @@
   align-items: center;
   justify-content: center;
   flex: 1;
+}
+.removeFilter {
+  color: rgb(184, 60, 29);
 }

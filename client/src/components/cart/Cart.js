@@ -186,7 +186,7 @@ const Cart = (props) => {
           )}
         </>
       )}
-      {page === 2 && <OrderInfo total={total} />}
+      {page === 2 && <OrderInfo total={total} products={cart}/>}
       {cart.length > 0 && getStepButton(page)}
     </div>
   );

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Typography,
   Grid,
@@ -14,8 +14,10 @@ import Axios from "axios";
 import { useFetch } from "../../api/useFetch";
 import { useNavigate } from "react-router-dom";
 import styles from "./OrderInfo.module.css";
-const OrderInfo = (props) => {
+
+const OrderInfo = ({ total, products }) => {
   const navigate = useNavigate();
+
   const [shippingAddress, setShippingAddress] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -25,6 +27,8 @@ const OrderInfo = (props) => {
   const [region, setRegion] = useState("");
   const [message, setMessage] = useState("");
   const [paymentMethod, setPaymentMethod] = useState("Card");
+  const [valid, setValid] = useState(true);
+
   const { fetcher } = useFetch();
   const sendOrder = async () => {
     if (
@@ -50,7 +54,7 @@ const OrderInfo = (props) => {
     };
     const result = await Axios.post(
       `${process.env.REACT_APP_HOSTNAME}/order/sendOrder`,
-      { shipping, total: props.total, paymentMethod },
+      { shipping, total, paymentMethod },
       { withCredentials: true }
     );
     console.log(result);
@@ -63,9 +67,24 @@ const OrderInfo = (props) => {
       }
     }
   };
+
+  useEffect(() => {
+    if (paymentMethod === "Cash") {
+      for (const product of products) {
+        if (product.category === "subscription") return setValid(false);
+      }
+    }
+    setValid(true);
+  }, [paymentMethod, products]);
+
   return (
     <>
       {message && <p className={styles.errorMessage}>{message}</p>}
+      {!valid && (
+        <p className={styles.errorMessage}>
+          Subscriptions cannot be ordered with cash
+        </p>
+      )}
       <Typography variant="h6" gutterBottom>
         Shipping address
       </Typography>
@@ -195,7 +214,9 @@ const OrderInfo = (props) => {
         </Grid>
       </Grid>
       <Stack direction="row" justifyContent="end">
-        <Button onClick={sendOrder}>Send Order</Button>
+        <Button onClick={sendOrder} disabled={!valid}>
+          Send Order
+        </Button>
       </Stack>
     </>
   );

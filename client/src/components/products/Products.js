@@ -3,35 +3,54 @@ import styles from "./Products.module.css";
 import { useSelector } from "react-redux";
 import ProductsCategories from "./ProductsCategories";
 import { useParams } from "react-router-dom";
-import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { useFetch } from "../../api/useFetch";
 
 const Products = () => {
   const [filteredItems, setFilteredItems] = useState(null);
+  const [enabled, setEnabled] = useState(false);
   const category = useParams();
   const products = useSelector((state) => state.products);
+  const { fetcher } = useFetch();
+
   useEffect(() => {
-    const prod = products?.sort((a, b) => b.stock - a.stock);
-    if (prod) {
-      if (category.category) {
-        const filtered = prod.filter((product) => {
-          return product.category === category.category;
-        });
-        setFilteredItems(filtered);
-      } else setFilteredItems(prod);
+    fetcher();
+  }, [fetcher]);
+
+  useEffect(() => {
+    if (products) {
+      const sortedProducts = products?.sort((a, b) =>
+        a.name.localeCompare(b.name)
+      );
+      const inStock = sortedProducts?.filter((a) => a.stock !== 0);
+      const outofStock = sortedProducts?.filter((a) => a.stock === 0);
+
+      if (sortedProducts) {
+        if (category.category) {
+          const filtered = inStock.filter((product) => {
+            return product.category === category.category;
+          });
+          filtered.concat(outofStock);
+          setFilteredItems(filtered);
+        } else {
+          const items = [...inStock, ...outofStock];
+          setFilteredItems(items);
+        }
+      }
     }
   }, [category.category, products]);
+
+  useEffect(() => {
+    if (category.category) {
+      setEnabled(true);
+    } else setEnabled(false);
+  }, [category.category]);
 
   return (
     <>
       <div className={styles.container}>
         <div className={styles.categories}>
-          {category.category && (
-            <Link to={`/shop`}>
-              <p>Remove filters</p>
-            </Link>
-          )}
-          <ProductsCategories />
+          <ProductsCategories enabled={enabled} />
         </div>
         <div className={styles.productsContainer}>
           {filteredItems?.map((product) => (
