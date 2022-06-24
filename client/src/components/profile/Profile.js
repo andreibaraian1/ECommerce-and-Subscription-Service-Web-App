@@ -67,12 +67,12 @@ const Profile = () => {
       zipcode,
       state,
     };
-    const updateUser = await Axios.post(
+    await Axios.post(
       `${process.env.REACT_APP_HOSTNAME}/users/updateUserInfo`,
       { user },
       { withCredentials: true }
     );
-    console.log(updateUser);
+
   };
   const handleQR = async () => {
     const getQR = await Axios.get(

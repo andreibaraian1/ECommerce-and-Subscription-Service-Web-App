@@ -52,19 +52,22 @@ const OrderInfo = ({ total, products }) => {
       shippingAddress,
       region,
     };
-    const result = await Axios.post(
-      `${process.env.REACT_APP_HOSTNAME}/order/sendOrder`,
-      { shipping, total, paymentMethod },
-      { withCredentials: true }
-    );
-    console.log(result);
-    if (result.status === 200) {
-      if (result.data?.url) {
-        window.location.href = result.data.url;
-      } else {
-        navigate("/"); //navigate to order
-        fetcher();
+    try {
+      const result = await Axios.post(
+        `${process.env.REACT_APP_HOSTNAME}/order/sendOrder`,
+        { shipping, total, paymentMethod },
+        { withCredentials: true }
+      );
+      if (result.status === 200) {
+        if (result.data?.url) {
+          window.location.href = result.data.url;
+        } else {
+          navigate("/"); //navigate to order
+          fetcher();
+        }
       }
+    } catch (error) {
+      setMessage(error.response.data.error);
     }
   };
 

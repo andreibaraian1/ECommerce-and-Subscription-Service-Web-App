@@ -15,7 +15,7 @@ const Product = (props) => {
       id: id,
       quantity: 1,
     };
-    console.log(insertProduct);
+
     const insertCart = await Axios.post(
       `${process.env.REACT_APP_HOSTNAME}/cart/insertCart`,
       { product: insertProduct },

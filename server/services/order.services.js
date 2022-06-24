@@ -30,15 +30,18 @@ const checkOrder = async (cartProducts, total) => {
       idCart: product.idCart,
     };
   });
+
   let sum = 0;
   let ok = true;
+
   for (const product in finalCart) {
     const payload = finalCart[product];
-    if (payload.stock === 0) {
+    if (payload.stock === 0 || payload.stock <= payload.quantity) {
       ok = false;
     }
     sum += payload.price * payload.quantity;
   }
+
   return {
     finalCart,
     valid: sum === total && ok,

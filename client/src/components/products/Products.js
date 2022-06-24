@@ -27,11 +27,14 @@ const Products = () => {
 
       if (sortedProducts) {
         if (category.category) {
-          const filtered = inStock.filter((product) => {
+          const filteredStock = inStock.filter((product) => {
             return product.category === category.category;
           });
-          filtered.concat(outofStock);
-          setFilteredItems(filtered);
+          const filteredOutOfStock = outofStock.filter((product) => {
+            return product.category === category.category;
+          });
+          const items = [...filteredStock, ...filteredOutOfStock];
+          setFilteredItems(items);
         } else {
           const items = [...inStock, ...outofStock];
           setFilteredItems(items);
