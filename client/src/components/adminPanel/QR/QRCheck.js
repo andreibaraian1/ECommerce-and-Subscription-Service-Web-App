@@ -8,32 +8,34 @@ const QRCheck = () => {
   const dispatch = useDispatch();
   const [data, setData] = useState("");
   useEffect(() => {
-    const checkToken = () => {
-      Axios.post(
-        `${process.env.REACT_APP_HOSTNAME}/users/checkQRToken`,
-        { token: data },
-        { withCredentials: true }
-      ).then((res) => {
-        if (res.data.valid) {
-          dispatch(setModal());
-          dispatch(setModalMessage(res.data.message));
-          setTimeout(() => {
+    if (data) {
+      const checkToken = () => {
+        Axios.post(
+          `${process.env.REACT_APP_HOSTNAME}/users/checkQRToken`,
+          { token: data },
+          { withCredentials: true }
+        ).then((res) => {
+          if (res.data.valid) {
             dispatch(setModal());
-            dispatch(setModalMessage(""));
-            setData("");
-          }, 2500);
-        } else {
-          dispatch(setModal());
-          dispatch(setModalMessage("QR Code invalid"));
-          setTimeout(() => {
+            dispatch(setModalMessage(res.data.message));
+            setTimeout(() => {
+              dispatch(setModal());
+              dispatch(setModalMessage(""));
+              setData("");
+            }, 2500);
+          } else {
             dispatch(setModal());
-            dispatch(setModalMessage(""));
-            setData("");
-          }, 2500);
-        }
-      });
-    };
-    checkToken();
+            dispatch(setModalMessage("QR Code invalid"));
+            setTimeout(() => {
+              dispatch(setModal());
+              dispatch(setModalMessage(""));
+              setData("");
+            }, 2500);
+          }
+        });
+      };
+      checkToken();
+    }
   }, [data, dispatch]);
   return (
     <>
