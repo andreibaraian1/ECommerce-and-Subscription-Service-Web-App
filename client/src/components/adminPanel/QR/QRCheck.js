@@ -21,7 +21,15 @@ const QRCheck = () => {
             dispatch(setModal());
             dispatch(setModalMessage(""));
             setData("");
-          }, "2500");
+          }, 2500);
+        } else {
+          dispatch(setModal());
+          dispatch(setModalMessage("QR Code invalid"));
+          setTimeout(() => {
+            dispatch(setModal());
+            dispatch(setModalMessage(""));
+            setData("");
+          }, 2500);
         }
       });
     };
